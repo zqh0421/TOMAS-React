@@ -1,0 +1,8 @@
+ports:
+- port: 5679
+  onOpen: open-preview
+tasks:
+- before: >
+    export DEV_HOST=$(gp url 5679)
+  init: npm install -g pnpm & pnpm install
+  command: pnpm run dev
