@@ -1,4 +1,6 @@
-import React, { useState, forwardRef, useImperativeHandle, Ref } from 'react'
+import React, { useState, forwardRef, useImperativeHandle, Ref, useEffect, useRef } from 'react'
+import { test, testPost } from '../apis/test';
+import { StartRecord, StopRecord, Loading } from './recordStatus';
 
 export interface InputBoxRef {
   getInputValue: () => string | undefined;
@@ -7,7 +9,9 @@ export interface InputBoxRef {
 
 const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) => {
   const [inputValue, setInputValue] = useState('')
-
+  const [recordStatus, setRecordStatus] = useState(0) // 0-start, 1-stop, 2-loading
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const audioChunks = useRef<Blob[]>([]);
   useImperativeHandle(ref, () => ({
     getInputValue: () => inputValue,
     clearInput: () => setInputValue('')
@@ -17,8 +21,13 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
     setInputValue(e.target.value)
   }
 
-  const onSend = () => {
+  const onSend = async () => {
     props.onSend()
+    // try {
+    //   await testPost.send();
+    // } catch (error) {
+    //   console.log(`Error: {error}`);
+    // }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -28,19 +37,69 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
     }
   }
 
+  useEffect(() => {
+    if (recordStatus===2) {
+      setTimeout(() => {
+        setInputValue(inputValue+"add some new message from speech-to-text api...")
+        setRecordStatus(0);
+      }, 3000)
+    }
+  }, [recordStatus])
+
+  const transcriptRecord = (formData: FormData) => {
+    try {
+      // TODO: upload and receive
+      console.log("uploaded")
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
+  const handleStartRecording = () => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      const newMediaRecorder = new MediaRecorder(stream);
+      setMediaRecorder(newMediaRecorder);
+      
+      newMediaRecorder.start();
+      setRecordStatus(1);
+
+      newMediaRecorder.ondataavailable = (event) => {
+          audioChunks.current.push(event.data);
+      };
+      
+      newMediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks.current, { 'type' : 'audio/webm; codecs=opus' });
+          const formData = new FormData();
+          formData.append('file', audioBlob, 'audio_recording.webm')
+          transcriptRecord(formData);
+          audioChunks.current = [];
+      };
+    });
+  }
+
+  const handleStopRecording = () => {
+    if (mediaRecorder) {
+        mediaRecorder.stop();
+        setRecordStatus(2);
+    }
+  };
+
+  const handleRecord = () => {
+    switch (recordStatus) {
+      case 0: // start
+        handleStartRecording();
+        break;
+      case 1:
+        handleStopRecording();
+        break;
+      case 2:
+        break;
+      default: break;
+    }
+  }
+
   return (
     <div>
-      <dialog id="my_modal_4" className="modal">
-        <form method="dialog" className="modal-box w-11/12 max-w-5xl">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">In the future version, whiper-2 speech-to-text will be supported.</p>
-          <p className="py-4">Click the button below to close.</p>
-          <div className="modal-action">
-            {/* if there is a button, it will close the modal */}
-            <button className="btn">Close</button>
-          </div>
-        </form>
-      </dialog>
       <div className="join w-full">
       <div className="w-full">
         <div className="w-full">
@@ -53,8 +112,8 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
           />
         </div>
       </div>
-      <button className="btn btn-ghost join-item" onClick={()=>window.my_modal_4.showModal()}>
-      <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-5 h-5 stroke-current" viewBox="0 0 384 512"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M96 96V256c0 53 43 96 96 96s96-43 96-96H208c-8.8 0-16-7.2-16-16s7.2-16 16-16h80V192H208c-8.8 0-16-7.2-16-16s7.2-16 16-16h80V128H208c-8.8 0-16-7.2-16-16s7.2-16 16-16h80c0-53-43-96-96-96S96 43 96 96zM320 240v16c0 70.7-57.3 128-128 128s-128-57.3-128-128V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v24z"/></svg>
+      <button className="btn btn-ghost join-item" onClick={()=>{handleRecord()}} disabled={recordStatus===2 ? true : false}>
+       {recordStatus===0 ? <StartRecord/> : recordStatus===1 ? <StopRecord/> : <Loading/>}
       </button>
       <button className="btn join-item" onClick={() => onSend()}>Send</button>
     </div>
