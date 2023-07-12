@@ -5,14 +5,14 @@ The React version of TOMAS Client.
 
 ## Updates
 ### TODOs for Jul 12
-[ ] able to delete atom chat item in chat history.
-[x] When new chat item is added to chat history and chat list is not scrolled to bottom, pop up new message notification.
-[ ] Use swr to save the chat history state.
-[ ] Make it available for different screen size.
-[ ] Add hover btn for user to directly scroll to the newest message
-[ ] Add whisper-1 stt
-[ ] Text Size & Style config
-[ ] Use Langchain to format style simplified HTML
+- [ ] able to delete atom chat item in chat history.
+- [x] When new chat item is added to chat history and chat list is not scrolled to bottom, pop up new message notification.
+- [ ] Use swr to save the chat history state.
+- [ ] Make it available for different screen size.
+- [ ] Add hover btn for user to directly scroll to the newest message
+- [ ] Add whisper-1 stt
+- [ ] Text Size & Style config
+- [ ] Use Langchain to format style simplified HTML
 
 
 ## Current Tech Stack
