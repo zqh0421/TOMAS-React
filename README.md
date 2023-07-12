@@ -13,6 +13,11 @@ The React version of TOMAS Client.
 - [ ] Add whisper-1 stt
 - [ ] Text Size & Style config
 - [ ] Use Langchain to format style simplified HTML
+- [ ] Display styled simplified HTML
+  - [ ] JSDom -> remove i attribute
+  - [ ] Ask purpose
+  - [ ] make HTML prettier based on its purpose
+  - [ ] remove redundant \n, \t, ..., then save as string.
 
 
 ## Current Tech Stack
