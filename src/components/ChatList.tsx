@@ -1,12 +1,14 @@
+import { forwardRef, Ref } from 'react'
+
 export interface ChatItem {
   id: number | undefined,
   name: string | undefined,
   content: string | undefined
 }
 
-const ChatList = (props: { className: string, chatHistory: Array<ChatItem> | {} | undefined}) => {
+const ChatList = (props: { className: string, chatHistory: Array<ChatItem> | {} | undefined}, ref: Ref<HTMLDivElement> | undefined) => { 
   return (
-    <div className={`${props.className} overflow-scroll p-4 mb-4`}>
+    <div ref={ref} className={`${props.className} overflow-y-auto p-4 mb-4`}>
       {props.chatHistory && Array.isArray(props.chatHistory) && props.chatHistory.map(item => {
         return (
           <div className={`chat ${item.name === "TOMAS" ? "chat-start" : "chat-end"}`} key={item.id}>
@@ -20,11 +22,10 @@ const ChatList = (props: { className: string, chatHistory: Array<ChatItem> | {} 
             </div>
             <div className="chat-bubble">{item.content}</div>
           </div>
-          
         )
       })}
     </div>
   )
 }
 
-export default ChatList;
+export default forwardRef(ChatList);
