@@ -2,6 +2,7 @@
   "name": "tomas-react",
   "private": true,
   "version": "0.0.0",
+  "homepage": "http://zqh0421.github.io/TOMAS-React",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

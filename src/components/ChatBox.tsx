@@ -13,7 +13,7 @@ const ChatBox = (props: { className: string }) => {
   }, []);
 
   useEffect(() => {
-    // As there is no delete function for chatHistory for now, the change of chatHistory indicates there is add operation at the bottom of our chat list.
+    // Assume that there is no delete function for chatHistory for now
     handleScrollToBottom();
   }, [chatHistory]);
 

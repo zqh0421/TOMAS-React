@@ -3,6 +3,8 @@
 
 The React version of TOMAS Client.
 
+Have a look of current website at [TOMAS](https://zqh0421.github.io/TOMAS-React/)!
+
 ## Updates
 ### TODOs for Jul 12
 - [ ] able to delete atom chat item in chat history.
@@ -54,4 +56,4 @@ git add .
 git push
 git commit -m "messages"
 ```
-~~After you syncronize the changes, the GitHub workflows will be automatially executed. Check their status in `Actions`.~~
+After you syncronize the changes, the GitHub workflows (configured in `.github/workflows/`) will be automatially executed. Check their status in `Actions`.
