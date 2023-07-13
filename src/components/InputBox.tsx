@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, Ref, useEffect, useRef } from 'react'
-import { test, testPost } from '../apis/test';
+// import { test, testPost } from '../apis/test';
 import { StartRecord, StopRecord, Loading } from './recordStatus';
 
 export interface InputBoxRef {
@@ -49,7 +49,7 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
   const transcriptRecord = (formData: FormData) => {
     try {
       // TODO: upload and receive
-      console.log("uploaded")
+      console.log("uploaded", formData)
     } catch (err) {
       console.error(err);
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ChatList, { ChatItem } from "./ChatList";
 import InputBox, { InputBoxRef } from "./InputBox";
-import * as fakeData from '/src/assets/fakeData.json'
+import { fakeData } from '../assets/fakeData';
 
 const ChatBox = (props: { className: string }) => {
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]);
