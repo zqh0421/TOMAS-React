@@ -20,7 +20,7 @@ const ChatList = (props: { className: string, chatHistory: Array<ChatItem> | {} 
             <div className="chat-header">
               {item.name}
             </div>
-            <div className="chat-bubble">{item.content}</div>
+            <div className="chat-bubble items-center justify-center">{item.content ? item.content : <span className="loading loading-dots loading-md"></span>}</div>
           </div>
         )
       })}

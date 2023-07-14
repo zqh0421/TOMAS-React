@@ -4,7 +4,9 @@ import InputBox, { InputBoxRef } from "./InputBox";
 import { fakeData } from '../assets/fakeData';
 
 const ChatBox = (props: { className: string }) => {
-  const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]);
+  const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
+  const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
+  const [isSending, setIsSending] = useState<Boolean>(false);
   const inputRef = useRef<InputBoxRef>(null);
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -13,18 +15,53 @@ const ChatBox = (props: { className: string }) => {
   }, []);
 
   useEffect(() => {
+    setShownChatList(chatHistory)
+  }, [chatHistory])
+
+  useEffect(() => {
     // Assume that there is no delete function for chatHistory for now
     handleScrollToBottom();
-  }, [chatHistory]);
+    console.log(shownChatList)
+  }, [shownChatList]);
+
+  useEffect(() => {
+    if (isSending) {
+      try {
+        // get response from GPT
+        let ok = true;
+        setTimeout(() => {
+          console.log(ok)
+          if (ok) {
+            setChatHistory(chatHistory)
+            setShownChatList(chatHistory)
+          } else {
+            let list = shownChatList
+            list[list.length-1].content = "Response failed."
+            console.log(list)
+            console.log("--list--")
+            setShownChatList(list)
+            setIsSending(false)
+          }
+        }, 3000)
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [isSending]);
 
   const handleSend = () => {
     const inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
-    inputValue && setChatHistory([...chatHistory, {
-      id: 123,
+    inputValue && setShownChatList([...chatHistory, {
+      id: Math.floor(Math.random() * 1000),
       name: "You",
       content: inputValue
+    },{
+      id: Math.floor(Math.random() * 1000),
+      name: "TOMAS",
+      content: "",
     }])
     inputRef.current?.clearInput(); // Clear the input box
+    setIsSending(true)
   };
 
   const handleScrollToBottom = () => {
@@ -37,7 +74,7 @@ const ChatBox = (props: { className: string }) => {
 
   return (
     <div  className={`flex flex-col mb-1 relative ${props.className}`}>
-      <ChatList ref={listRef} className="flex-grow" chatHistory={chatHistory} />
+      <ChatList ref={listRef} className="flex-grow" chatHistory={shownChatList} />
       <button
         className="btn btn-circle absolute bottom-20 right-8 opacity-80"
         onClick={() => handleScrollToBottom()}  
