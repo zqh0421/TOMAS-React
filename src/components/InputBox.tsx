@@ -1,6 +1,6 @@
-import React, { useState, forwardRef, useImperativeHandle, Ref, useEffect, useRef } from 'react'
-// import { test, testPost } from '../apis/test';
+import React, { useState, forwardRef, useImperativeHandle, Ref, useRef } from 'react'
 import { StartRecord, StopRecord, Loading } from './recordStatus';
+import { transcribe } from '../apis/transcribe';
 
 export interface InputBoxRef {
   getInputValue: () => string | undefined;
@@ -37,27 +37,20 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
     }
   }
 
-  useEffect(() => {
-    if (recordStatus===2) {
-      setTimeout(() => {
-        setInputValue(inputValue+"add some new message from speech-to-text api...")
-        setRecordStatus(0);
-      }, 3000)
-    }
-  }, [recordStatus])
-
-  const transcriptRecord = (formData: FormData) => {
+  const transcribeRecord = async (formData: FormData) => {
     try {
-      // TODO: upload and receive
-      console.log("uploaded", formData)
-    } catch (err) {
+      const data = JSON.parse(await transcribe({ formData }))
+      setInputValue(inputValue + data.transcription)
+      setRecordStatus(0);
+    } catch (err: any) {
       console.error(err);
+      setRecordStatus(0); // failed!
     }
   }
   
   const handleStartRecording = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      const newMediaRecorder = new MediaRecorder(stream);
+      const newMediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/mp4' });
       setMediaRecorder(newMediaRecorder);
       
       newMediaRecorder.start();
@@ -68,10 +61,10 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
       };
       
       newMediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, { 'type' : 'audio/webm; codecs=opus' });
+          const audioBlob = new Blob(audioChunks.current, { "type": "audio/mp4" });
           const formData = new FormData();
-          formData.append('file', audioBlob, 'audio_recording.webm')
-          transcriptRecord(formData);
+          formData.append('audio_chunk', audioBlob, 'recording.mp4')
+          transcribeRecord(formData);
           audioChunks.current = [];
       };
     });
@@ -79,8 +72,8 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
 
   const handleStopRecording = () => {
     if (mediaRecorder) {
-        mediaRecorder.stop();
-        setRecordStatus(2);
+      setRecordStatus(2);
+      mediaRecorder.stop();
     }
   };
 
