@@ -77,6 +77,7 @@ const ChatBox = (props: { className: string }) => {
         .then(() => { // currerntly res is empty
           (async () => {
             setChatHistory(await getChatHistory());
+            setIsSending(false)
             setIsProcessing(true)
           })();
         })
