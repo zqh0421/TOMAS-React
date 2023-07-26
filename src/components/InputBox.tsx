@@ -35,7 +35,7 @@ const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unkno
   const transcribeRecord = async (formData: FormData) => {
     try {
       const data = JSON.parse(await transcribe({ formData }))
-      setInputValue(inputValue + data.transcription)
+      data.transcription && setInputValue(inputValue + data.transcription)
       setRecordStatus(0);
     } catch (err: any) {
       console.error(err);
