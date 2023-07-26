@@ -1,22 +1,61 @@
 import { useState, useEffect, useRef } from "react";
 import ChatList, { ChatItem } from "./ChatList";
 import InputBox, { InputBoxRef } from "./InputBox";
-import { fakeData } from "../assets/fakeData";
-
+import { getChat, sendMessage } from "../apis/chat";
 
 const ChatBox = (props: { className: string }) => {
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
-  const [isSending, setIsSending] = useState<Boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const inputRef = useRef<InputBoxRef>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  const loadingMessage = (role: string) => {
+    return {
+      id: Math.floor(Math.random() * 1000).toString(),
+      role: role,
+      content: "",
+    }
+  }
+
+  const errorMessage = {
+    id: Math.floor(Math.random() * 1000).toString(),
+    role: "AI",
+    content: "Currently AI cannot make response. After you refresh this page, this error message will disappear, it's not saved in our database.",
+  }
+  
+  const getChatHistory = async () => {
+    try {
+      return (await getChat());
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
   useEffect(() => {
     // initialize
-    setChatHistory(fakeData.chatHistory);
+    (async () => {
+      setChatHistory(await getChatHistory());
+    })();
   }, []);
 
   useEffect(() => {
     setShownChatList(chatHistory);
+    if (isProcessing) {
+      setShownChatList([
+        ...chatHistory,
+        loadingMessage("AI"),
+      ]);
+      setTimeout(() => {
+        console.log("Respond failed")
+        setShownChatList([
+          ...chatHistory,
+          errorMessage
+        ])
+        setIsProcessing(false)
+      }, 1000);
+    }
   }, [chatHistory]);
 
   useEffect(() => {
@@ -25,49 +64,27 @@ const ChatBox = (props: { className: string }) => {
     console.log(shownChatList);
   }, [shownChatList]);
 
-  useEffect(() => {
-    if (isSending) {
-      try {
-        // get response from GPT
-        let ok = true;
-        setTimeout(() => {
-          console.log(ok);
-          if (ok) {
-            setChatHistory(chatHistory);
-            setShownChatList(chatHistory);
-          } else {
-            let list = shownChatList;
-            list[list.length - 1].content = "Response failed.";
-            console.log(list);
-            console.log("--list--");
-            setShownChatList(list);
-            setIsSending(false);
-          }
-        }, 3000);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }, [isSending]);
-
-  const handleSend = () => {
+  const handleSend = async () => {
     const inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
-    inputValue &&
+    if (inputValue) {
+      setIsSending(true);
       setShownChatList([
         ...chatHistory,
-        {
-          id: Math.floor(Math.random() * 1000),
-          name: "You",
-          content: inputValue,
-        },
-        {
-          id: Math.floor(Math.random() * 1000),
-          name: "TOMAS",
-          content: "",
-        },
+        loadingMessage("HUMAN")
       ]);
+      try {
+        sendMessage({content: inputValue})
+        .then(() => { // currerntly res is empty
+          (async () => {
+            setChatHistory(await getChatHistory());
+            setIsProcessing(true)
+          })();
+        })
+      } catch (err) {
+        console.error(err)
+      }
+    }
     inputRef.current?.clearInput(); // Clear the input box
-    setIsSending(true);
   };
 
   const handleScrollToBottom = () => {
@@ -112,7 +129,7 @@ const ChatBox = (props: { className: string }) => {
           ></path>
         </svg>
       </button>
-      <InputBox ref={inputRef} onSend={handleSend} />
+      <InputBox ref={inputRef} onSend={handleSend} isSending={isSending} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ export interface InputBoxRef {
   clearInput: () => void;
 }
 
-const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) => {
+const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unknown> | undefined) => {
   const [inputValue, setInputValue] = useState('')
   const [recordStatus, setRecordStatus] = useState(0) // 0-start, 1-stop, 2-loading
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
@@ -23,11 +23,6 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
 
   const onSend = async () => {
     props.onSend()
-    // try {
-    //   await testPost.send();
-    // } catch (error) {
-    //   console.log(`Error: {error}`);
-    // }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -97,7 +92,7 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
       <div className="w-full">
         <div className="w-full">
           <input
-            className="input join-item w-full"
+            className="input join-item w-full text-lg"
             placeholder="Chat with TOMAS..."
             value={inputValue}
             onChange={(e) => onInputBoxChange(e)}
@@ -105,10 +100,10 @@ const InputBox = (props: { onSend: Function }, ref: Ref<unknown> | undefined) =>
           />
         </div>
       </div>
-      <button className="btn btn-ghost join-item" onClick={()=>{handleRecord()}} disabled={recordStatus===2 ? true : false}>
+      <button className="btn btn-ghost join-item" onClick={()=>{handleRecord()}} disabled={recordStatus===2 || props.isSending}>
        {recordStatus===0 ? <StartRecord/> : recordStatus===1 ? <StopRecord/> : <Loading/>}
       </button>
-      <button className="btn join-item" onClick={() => onSend()}>
+      <button className="btn join-item" disabled={props.isSending} onClick={() => onSend()}>
       <svg
       xmlns="http://www.w3.org/2000/svg"
       className="inline-block w-5 h-5 stroke-current"
