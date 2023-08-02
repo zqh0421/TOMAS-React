@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, Ref, useRef } from 'react'
+import { Input } from 'antd'
 import { StartRecord, StopRecord, Loading } from './recordStatus';
 import { transcribe } from '../apis/transcribe';
 
@@ -6,6 +7,8 @@ export interface InputBoxRef {
   getInputValue: () => string | undefined;
   clearInput: () => void;
 }
+
+const { TextArea } = Input;
 
 const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unknown> | undefined) => {
   const [inputValue, setInputValue] = useState('')
@@ -17,7 +20,7 @@ const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unkno
     clearInput: () => setInputValue('')
   }));
 
-  const onInputBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputBoxChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value)
   }
 
@@ -89,21 +92,19 @@ const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unkno
   return (
     <div>
       <div className="join w-full">
-      <div className="w-full">
-        <div className="w-full">
-          <input
-            className="input join-item w-full text-lg"
-            placeholder="Chat with TOMAS..."
-            value={inputValue}
-            onChange={(e) => onInputBoxChange(e)}
-            onKeyUp={(e) => handleKeyPress(e)}
-          />
-        </div>
-      </div>
-      <button className="btn btn-ghost join-item" onClick={()=>{handleRecord()}} disabled={recordStatus===2 || props.isSending}>
+      <TextArea
+        autoSize={true}
+        className="input join-item w-full text-lg focus:outline-none"
+        style={{ maxHeight: "300px", lineHeight: "28px"}}
+        placeholder="Chat with TOMAS..."
+        value={inputValue}
+        onChange={(e) => onInputBoxChange(e)}
+        onKeyUp={(e) => handleKeyPress(e)}
+      />
+      <button className="btn btn-ghost join-item h-[38px] min-h-[38px]" onClick={()=>{handleRecord()}} disabled={recordStatus===2 || props.isSending}>
        {recordStatus===0 ? <StartRecord/> : recordStatus===1 ? <StopRecord/> : <Loading/>}
       </button>
-      <button className="btn join-item" disabled={props.isSending} onClick={() => onSend()}>
+      <button className="btn join-item h-[38px] min-h-[38px]" disabled={props.isSending} onClick={() => onSend()}>
       <svg
       xmlns="http://www.w3.org/2000/svg"
       className="inline-block w-5 h-5 stroke-current"

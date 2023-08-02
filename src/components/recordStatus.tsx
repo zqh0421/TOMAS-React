@@ -30,9 +30,9 @@ export function StopRecord() {
   )
 }
 
-export function Loading() {
+export function Loading(query: {className?: string}) {
   return (
-    <span className="loading loading-spinner loading-l"></span>
+    <span className={`loading loading-spinner loading-l ${query.className}`}></span>
   )
 }
 
