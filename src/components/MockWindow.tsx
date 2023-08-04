@@ -9,375 +9,2146 @@ const MockWindow = (props: { className: string, html?: string, title?: string })
     const [isDisabled, setIsDisabled] = useState(false)
     const inputRef = useRef<InputRef>(null);
     const suffix = <svg xmlns="http://www.w3.org/2000/svg" className="h-4" viewBox="0 0 512 512"><path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM281 385c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l71-71L136 280c-13.3 0-24-10.7-24-24s10.7-24 24-24l182.1 0-71-71c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L393 239c9.4 9.4 9.4 24.6 0 33.9L281 385z"/></svg>
-  // const defaultHTML = '<div class="justify-center items-center px-4 py-16 h-[100%] text-xl"><p>Hello, my name is&nbsp<span class="text-primary-focus">TOMAS</span>.</p><p>Feel free to ask me in the chat box! :)</p></div>'
-  const defaultHTML = `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Elderly-friendly Website</title>
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-      <style>
-          a {
-              text-decoration: underline;
-              color: blue;
-          }
-      </style>
-  </head>
-  <body class="text-lg font-semibold">
-      <ul>
-          <div>
-              <div>
-                  <li>
-                      <div>
-                          <a href="/movies/insidious-the-red-door" class="text-2xl">
-                              <span>
-                                  Insidious: The Red Door
-                              </span>
-                          </a>
-                          <a href="javascript:void(0)" class="block mt-2 mb-4">
-                              <i class="fas fa-info-circle text-blue-500"></i>
-                          </a>
-                          <div>
-                              <div>
-                                  <a href="/Membership/SignIn?movieId=92053">
-                                      <span>
-                                          Add to Watch List
-                                      </span>
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-                  </li>
-                  <!-- Repeated for all movies -->
-              </div>
+//     const defaultHTML = `
+//     <div class="text-lg">
+//  <h2 class="font-bold text-2xl">
+//   Discover popular bus routes
+//  </h2>
+//  <ul class="list-disc list-inside">
+//   <li>
+//    <a href="/en-us/bus-from-atlantic-city-to-new-york" class="underline text-blue-500">
+//     Atlantic City NJ to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-new-york-to-philadelphia" class="underline text-blue-500">
+//     New York NY to Philadelphia PA
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-albany-3-to-new-york" class="underline text-blue-500">
+//     Albany NY to Ney York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-boston-to-new-york" class="underline text-blue-500">
+//     Boston MA to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-new-york-to-syracuse-1" class="underline text-blue-500">
+//     New York NY to Syracuse NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-las-vegas-1-to-los-angeles" class="underline text-blue-500">
+//     Las Vegas NV to Los Angeles CA
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-binghamton-to-new-york" class="underline text-blue-500">
+//     Binghamton NY to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-baltimore-to-new-york" class="underline text-blue-500">
+//     Baltimore MD to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-dallas-to-houston" class="underline text-blue-500">
+//     Dallas TX to Houston TX
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-new-york-to-washington-2" class="underline text-blue-500">
+//     New York NY to Washington DC
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-monterrey-to-nuevo-laredo" class="underline text-blue-500">
+//     Monterrey MX to Nuevo Laredo MX
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-buffalo-to-new-york" class="underline text-blue-500">
+//     Buffalo NY to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-chicago-to-minneapolis" class="underline text-blue-500">
+//     Chicago IL to Minneapolis MN
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-houston-to-san-antonio" class="underline text-blue-500">
+//     Houston TX to San Antonio TX
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-los-angeles-to-phoenix" class="underline text-blue-500">
+//     Los Angeles CA to Phoenix AZ
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-new-york-to-montreal" class="underline text-blue-500">
+//     New York NY to Montreal QC
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-miami-to-orlando" class="underline text-blue-500">
+//     Miami FL to Orlando FL
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-los-angeles-to-san-diego-1" class="underline text-blue-500">
+//     Los Angeles CA to San Diego CA
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-toronto-to-new-york" class="underline text-blue-500">
+//     Toronto ON to New York NY
+//    </a>
+//   </li>
+//   <li>
+//    <a href="/en-us/bus-from-vancouver-to-seattle" class="underline text-blue-500">
+//     Vancouver BC to Seattle WA
+//    </a>
+//   </li>
+//  </ul>
+// </div>
+//   `
+    const defaultHTML = `
+    <html><head></head><body>
+    <style></style><ul class="ResultsList__resultsList___eGsLK">
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 1:20â€¯pm till Thu, Aug 3 at 7:30â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
           </div>
-          <button aria-label="next" type="button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-              Next
-          </button>
-      </ul>
-  </body>
-  </html>
-  `
-//   const defaultHTML = `<ul i="565">
-//   <div i="566">
-//    <div i="567">
-//     <li i="568">
-//      <div i="569">
-//       <a href="/movies/insidious-the-red-door" i="570">
-//        <span i="573">
-//         Insidious: The Red Door
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="574">
-//       </a>
-//       <div i="576">
-//        <div i="577">
-//         <a href="/Membership/SignIn?movieId=92053" i="578">
-//          <span i="583">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="584">
-//      <div i="585">
-//       <a href="/movies/indiana-jones-and-the-dial-of-destiny" i="586">
-//        <span i="589">
-//         Indiana Jones and the Dial of Destiny
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="590">
-//       </a>
-//       <div i="592">
-//        <div i="593">
-//         <a href="/Membership/SignIn?movieId=92052" i="594">
-//          <span i="599">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="600">
-//      <div i="601">
-//       <a href="/movies/sound-of-freedom" i="602">
-//        <span i="605">
-//         Sound of Freedom
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="606">
-//       </a>
-//       <div i="608">
-//        <div i="609">
-//         <a href="/Membership/SignIn?movieId=93340" i="610">
-//          <span i="615">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="616">
-//      <div i="617">
-//       <a href="/movies/joy-ride-2023" i="618">
-//        <span i="621">
-//         Joy Ride (2023)
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="622">
-//       </a>
-//       <div i="624">
-//        <div i="625">
-//         <a href="/Membership/SignIn?movieId=92452" i="626">
-//          <span i="631">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="632">
-//      <div i="633">
-//       <a href="/movies/mission-impossible-dead-reckoning-part-one" i="634">
-//        <div i="637">
-//         Advance Tickets
-//        </div>
-//        <span i="638">
-//         Mission: Impossible - Dead Reckoning Part One
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="639">
-//       </a>
-//       <div i="641">
-//        <div i="642">
-//         <a href="/Membership/SignIn?movieId=92054" i="643">
-//          <span i="648">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="649">
-//      <div i="650">
-//       <a href="/movies/elemental" i="651">
-//        <span i="654">
-//         Elemental
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="655">
-//       </a>
-//       <div i="657">
-//        <div i="658">
-//         <a href="/Membership/SignIn?movieId=92048" i="659">
-//          <span i="664">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="665">
-//      <div i="666">
-//       <a href="/movies/spider-man-across-the-spider-verse" i="667">
-//        <span i="670">
-//         Spider-Man: Across the Spider-Verse
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="671">
-//       </a>
-//       <div i="673">
-//        <div i="674">
-//         <a href="/Membership/SignIn?movieId=92045" i="675">
-//          <span i="680">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="681">
-//      <div i="682">
-//       <a href="/movies/barbie" i="683">
-//        <div i="686">
-//         Advance Tickets
-//        </div>
-//        <span i="687">
-//         Barbie
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="688">
-//       </a>
-//       <div i="690">
-//        <div i="691">
-//         <a href="/Membership/SignIn?movieId=92056" i="692">
-//          <span i="697">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="698">
-//      <div i="699">
-//       <a href="/movies/oppenheimer" i="700">
-//        <div i="703">
-//         Advance Tickets
-//        </div>
-//        <span i="704">
-//         Oppenheimer
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="705">
-//       </a>
-//       <div i="707">
-//        <div i="708">
-//         <a href="/Membership/SignIn?movieId=92055" i="709">
-//          <span i="714">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="715">
-//      <div i="716">
-//       <a href="/movies/no-hard-feelings" i="717">
-//        <span i="720">
-//         No Hard Feelings
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="721">
-//       </a>
-//       <div i="723">
-//        <div i="724">
-//         <a href="/Membership/SignIn?movieId=92051" i="725">
-//          <span i="730">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="731">
-//      <div i="732">
-//       <a href="/movies/transformers-rise-of-the-beasts" i="733">
-//        <span i="736">
-//         Transformers: Rise of the Beasts
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="737">
-//       </a>
-//       <div i="739">
-//        <div i="740">
-//         <a href="/Membership/SignIn?movieId=92046" i="741">
-//          <span i="746">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="747">
-//      <div i="748">
-//       <a href="/movies/ruby-gillman-teenage-kraken" i="749">
-//        <span i="752">
-//         Ruby Gillman, Teenage Kraken
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="753">
-//       </a>
-//       <div i="755">
-//        <div i="756">
-//         <a href="/Membership/SignIn?movieId=92884" i="757">
-//          <span i="762">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="763">
-//      <div i="764">
-//       <a href="/movies/the-flash" i="765">
-//        <span i="768">
-//         The Flash
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="769">
-//       </a>
-//       <div i="771">
-//        <div i="772">
-//         <a href="/Membership/SignIn?movieId=92049" i="773">
-//          <span i="778">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="779">
-//      <div i="780">
-//       <a href="/movies/the-little-mermaid" i="781">
-//        <span i="784">
-//         The Little Mermaid
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="785">
-//       </a>
-//       <div i="787">
-//        <div i="788">
-//         <a href="/Membership/SignIn?movieId=92042" i="789">
-//          <span i="794">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//     <li i="795">
-//      <div i="796">
-//       <a href="/movies/asteroid-city" i="797">
-//        <span i="800">
-//         Asteroid City
-//        </span>
-//       </a>
-//       <a href="javascript:void(0)" i="801">
-//       </a>
-//       <div i="803">
-//        <div i="804">
-//         <a href="/Membership/SignIn?movieId=93585" i="805">
-//          <span i="810">
-//           Add to Watch List
-//          </span>
-//         </a>
-//        </div>
-//       </div>
-//      </div>
-//     </li>
-//    </div>
-//   </div>
-//   <button aria-label="next" i="812" type="button">
-//    Next
-//   </button>
-//  </ul>`
-
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 1:20â€¯pm</span><span>1:20â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:10 hrs</span><span> 6:10 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 7:30â€¯pm </span><span>7:30â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downey (Stonewood Center)</span><span>Downey (Stonewood Center)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 1:20â€¯pm till Thu, Aug 3 at 7:55â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 1:20â€¯pm</span><span>1:20â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:35 hrs</span><span> 6:35 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 7:55â€¯pm </span><span>7:55â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downey (Stonewood Center)</span><span>Downey (Stonewood Center)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 1:20â€¯pm till Thu, Aug 3 at 8:20â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 1:20â€¯pm</span><span>1:20â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 7:00 hrs</span><span> 7:00 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 8:20â€¯pm </span><span>8:20â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downey (Stonewood Center)</span><span>Downey (Stonewood Center)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Henderson (Galleria at Sunset)</span><span>Henderson (Galleria at Sunset)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 2:00â€¯pm till Thu, Aug 3 at 7:30â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 2:00â€¯pm</span><span>2:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:30 hrs</span><span> 5:30 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 7:30â€¯pm </span><span>7:30â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 2:00â€¯pm till Thu, Aug 3 at 7:55â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 2:00â€¯pm</span><span>2:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:55 hrs</span><span> 5:55 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 7:55â€¯pm </span><span>7:55â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 2:00â€¯pm till Thu, Aug 3 at 8:20â€¯pm for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 2:00â€¯pm</span><span>2:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:20 hrs</span><span> 6:20 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 8:20â€¯pm </span><span>8:20â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Henderson (Galleria at Sunset)</span><span>Henderson (Galleria at Sunset)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">Only 1 seat available!</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 3:00â€¯pm till Thu, Aug 3 at 9:00â€¯pm for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 3:00â€¯pm</span><span>3:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:00 hrs</span><span> 6:00 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 9:00â€¯pm </span><span>9:00â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 3:00â€¯pm till Thu, Aug 3 at 9:25â€¯pm for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 3:00â€¯pm</span><span>3:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:25 hrs</span><span> 6:25 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 9:25â€¯pm </span><span>9:25â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 3:10â€¯pm till Thu, Aug 3 at 10:10â€¯pm for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 3:10â€¯pm</span><span>3:10â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 7:00 hrs</span><span> 7:00 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 10:10â€¯pm </span><span>10:10â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Hollywood / Highland (LA)</span><span>Hollywood / Highland (LA)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 3:10â€¯pm till Thu, Aug 3 at 10:35â€¯pm for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 3:10â€¯pm</span><span>3:10â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 7:25 hrs</span><span> 7:25 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 10:35â€¯pm </span><span>10:35â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Hollywood / Highland (LA)</span><span>Hollywood / Highland (LA)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 4:00â€¯pm till Thu, Aug 3 at 10:10â€¯pm for
+        $42.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 4:00â€¯pm</span><span>4:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:10 hrs</span><span> 6:10 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 10:10â€¯pm </span><span>10:10â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__cheapestFastest___t3Hzo SearchResult__cheapestFastestSingle___dKC_Y">
+          <div class="CheapestFastestTitle__cheapestFastestTitle___vD6w0">
+            LOWEST PRICE
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$42.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw undefined">$42<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 4:00â€¯pm till Thu, Aug 3 at 10:35â€¯pm for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 4:00â€¯pm</span><span>4:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:35 hrs</span><span> 6:35 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 10:35â€¯pm </span><span>10:35â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 4:25â€¯pm till Thu, Aug 3 at 10:00â€¯pm for
+        $67.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            Greyhound
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 4:25â€¯pm</span><span>4:25â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:35 hrs</span><span> 5:35 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 10:00â€¯pm </span><span>10:00â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Los Angeles Union Station</span><span>Los Angeles Union Station</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:South Strip</span><span>South Strip</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$67.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$67<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 5:25â€¯pm till Thu, Aug 3 at 11:20â€¯pm for
+        $59.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 5:25â€¯pm</span><span>5:25â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:55 hrs</span><span> 5:55 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 11:20â€¯pm </span><span>11:20â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:USC (Hope/Jefferson)</span><span>USC (Hope/Jefferson)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$59.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$59<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 5:25â€¯pm till Thu, Aug 3 at 11:45â€¯pm for
+        $59.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 5:25â€¯pm</span><span>5:25â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:20 hrs</span><span> 6:20 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 11:45â€¯pm </span><span>11:45â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:USC (Hope/Jefferson)</span><span>USC (Hope/Jefferson)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$59.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$59<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 6:00â€¯pm till Thu, Aug 3 at 11:20â€¯pm for
+        $52.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 6:00â€¯pm</span><span>6:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:20 hrs</span><span> 5:20 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 11:20â€¯pm </span><span>11:20â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">3 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$52.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$52<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 6:00â€¯pm till Thu, Aug 3 at 11:45â€¯pm for
+        $52.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 6:00â€¯pm</span><span>6:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:45 hrs</span><span> 5:45 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 11:45â€¯pm </span><span>11:45â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">2 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$52.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$52<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 6:40â€¯pm till Fri, Aug 4 at 12:45â€¯am for
+        $88.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            Greyhound
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 6:40â€¯pm</span><span>6:40â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:05 hrs</span><span> 6:05 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 12:45â€¯am +1 day</span><span>12:45â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Los Angeles Union Station</span><span>Los Angeles Union Station</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:South Strip</span><span>South Strip</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">2 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$88.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$88<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 7:00â€¯pm till Thu, Aug 3 at 11:59â€¯pm for
+        $42.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 7:00â€¯pm</span><span>7:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 4:59 hrs</span><span> 4:59 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 11:59â€¯pm </span><span>11:59â€¯pm</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__cheapestFastest___t3Hzo SearchResult__cheapestFastestSingle___dKC_Y">
+          <div class="CheapestFastestTitle__cheapestFastestTitle___vD6w0">
+            LOWEST PRICE
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$42.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw undefined">$42<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 7:00â€¯pm till Fri, Aug 4 at 12:20â€¯am for
+        $47.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 7:00â€¯pm</span><span>7:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:20 hrs</span><span> 5:20 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 12:20â€¯am +1 day</span><span>12:20â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$47.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$47<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+              <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ">
+      <div class="SearchResult__voText___aFyh5">
+        Unavailable trip from Thu, Aug 3 at 9:00â€¯pm till Fri, Aug 4 at 2:25â€¯am
+      </div>
+      <div class="SearchResult__unbookableTripRow___ZMKF7">
+        <div class="SearchResult__locations___DOj9X">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp LocationsHorizontal__isDisabled___HzQnm">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 9:00â€¯pm</span><span>9:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU LocationsHorizontal__isDisabled___HzQnm">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:25 hrs</span><span> 5:25 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 2:25â€¯am +1 day</span><span>2:25â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D LocationsHorizontal__isDisabled___HzQnm">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:UCLA (Gayley/Strathmore)</span><span>UCLA (Gayley/Strathmore)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__resultRestrictedMessages___7qBLw">
+          <div class="useResultRestricted__bookingMessage___VxRKf">Sold out</div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ">
+      <div class="SearchResult__voText___aFyh5">
+        Unavailable trip from Thu, Aug 3 at 9:00â€¯pm till Fri, Aug 4 at 2:45â€¯am
+      </div>
+      <div class="SearchResult__unbookableTripRow___ZMKF7">
+        <div class="SearchResult__locations___DOj9X">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp LocationsHorizontal__isDisabled___HzQnm">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 9:00â€¯pm</span><span>9:00â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU LocationsHorizontal__isDisabled___HzQnm">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:45 hrs</span><span> 5:45 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 2:45â€¯am +1 day</span><span>2:45â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D LocationsHorizontal__isDisabled___HzQnm">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:UCLA (Gayley/Strathmore)</span><span>UCLA (Gayley/Strathmore)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__resultRestrictedMessages___7qBLw">
+          <div class="useResultRestricted__bookingMessage___VxRKf">Sold out</div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ">
+      <div class="SearchResult__voText___aFyh5">
+        Unavailable trip from Thu, Aug 3 at 9:40â€¯pm till Fri, Aug 4 at 2:25â€¯am
+      </div>
+      <div class="SearchResult__unbookableTripRow___ZMKF7">
+        <div class="SearchResult__locations___DOj9X">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp LocationsHorizontal__isDisabled___HzQnm">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 9:40â€¯pm</span><span>9:40â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU LocationsHorizontal__isDisabled___HzQnm">
+                    <span class="DurationTime__voText___N4rJk">Duration: 4:45 hrs</span><span> 4:45 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 2:25â€¯am +1 day</span><span>2:25â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D LocationsHorizontal__isDisabled___HzQnm">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__resultRestrictedMessages___7qBLw">
+          <div class="useResultRestricted__bookingMessage___VxRKf">Sold out</div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ">
+      <div class="SearchResult__voText___aFyh5">
+        Unavailable trip from Thu, Aug 3 at 9:40â€¯pm till Fri, Aug 4 at 2:45â€¯am
+      </div>
+      <div class="SearchResult__unbookableTripRow___ZMKF7">
+        <div class="SearchResult__locations___DOj9X">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp LocationsHorizontal__isDisabled___HzQnm">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 9:40â€¯pm</span><span>9:40â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU LocationsHorizontal__isDisabled___HzQnm">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:05 hrs</span><span> 5:05 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 2:45â€¯am +1 day</span><span>2:45â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D LocationsHorizontal__isDisabled___HzQnm">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Downtown LA (FlixBus Lot)</span><span>Downtown LA (FlixBus Lot)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv LocationsHorizontal__isDisabled___HzQnm">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__resultRestrictedMessages___7qBLw">
+          <div class="useResultRestricted__bookingMessage___VxRKf">Sold out</div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 11:50â€¯pm till Fri, Aug 4 at 4:50â€¯am for
+        $67.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            Greyhound
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 11:50â€¯pm</span><span>11:50â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 5:00 hrs</span><span> 5:00 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 4:50â€¯am +1 day</span><span>4:50â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:Los Angeles Union Station</span><span>Los Angeles Union Station</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:South Strip</span><span>South Strip</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">1 seat left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$67.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$67<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 11:55â€¯pm till Fri, Aug 4 at 5:55â€¯am for
+        $67.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 11:55â€¯pm</span><span>11:55â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:00 hrs</span><span> 6:00 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 5:55â€¯am +1 day</span><span>5:55â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:UCLA (Gayley/Strathmore)</span><span>UCLA (Gayley/Strathmore)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Las Vegas Strip (Las Vegas Blvd)</span><span>Las Vegas Strip (Las Vegas Blvd)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">3 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$67.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$67<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 11:55â€¯pm till Fri, Aug 4 at 6:20â€¯am for
+        $67.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 11:55â€¯pm</span><span>11:55â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:25 hrs</span><span> 6:25 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 6:20â€¯am +1 day</span><span>6:20â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:UCLA (Gayley/Strathmore)</span><span>UCLA (Gayley/Strathmore)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Downtown Las Vegas (1st St)</span><span>Downtown Las Vegas (1st St)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">3 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$67.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$67<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="SearchResult__searchResult___cgxzZ SearchResult__expandable___M10px">
+      <div class="SearchResult__voText___aFyh5">
+        Direct trip from Thu, Aug 3 at 11:55â€¯pm till Fri, Aug 4 at 6:50â€¯am for
+        $67.99
+      </div>
+      <div class="SearchResult__main___I4TtH">
+        <div class="SearchResult__labelsRow___yUI9I">
+          <div class="hcr-tag-7-6-0 hcr-tag--outlined-7-6-0 hcr-tag--small-7-6-0 BrandLabel__brandLabel___NkgP9 fxp1283-listener">
+            FlixBus
+          </div>
+        </div>
+        <div class="SearchResult__rowRideAndPrice___u0TJA">
+          <div class="hcr-grid-7-6-0 hcr-grid--gutter-2">
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__departure___bnRmG">
+                <div class="LocationsHorizontal__time___SaJCp">
+                  <span class="LocationsHorizontal__voText___pUgoW">Departure time: 11:55â€¯pm</span><span>11:55â€¯pm</span>
+                </div>
+                <div class="LocationsHorizontal__duration___rJ6rs">
+                  <div class="DurationTime__durationTimeWrapper___f3vHk LocationsHorizontal__durationTime___r1KjU">
+                    <span class="DurationTime__voText___N4rJk">Duration: 6:55 hrs</span><span> 6:55 hrs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <span class="LocationsHorizontal__timeWrapper___TujDY">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival time: 6:50â€¯am +1 day</span><span>6:50â€¯am</span><span class="LocationsHorizontal__dayDiff___xPn_D">+1 day</span></span>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-7-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Departure stop:UCLA (Gayley/Strathmore)</span><span>UCLA (Gayley/Strathmore)</span>
+              </div>
+            </div>
+            <div class="hcr-col-6-7-6-0 hcr-col-5-sm-7-6-0">
+              <div class="LocationsHorizontal__station___ItGEv">
+                <span class="LocationsHorizontal__voText___pUgoW">Arrival stop:Henderson (Galleria at Sunset)</span><span>Henderson (Galleria at Sunset)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SearchResult__rowMessage___jxm8z">
+          <span class="SearchResult__seatsLeft___UkJBY">3 seats left at this price</span>
+        </div>
+        <div class="SearchResult__rowInfo___kevIw">
+          <div class="SearchResult__transferInfo___ALn3E">
+            <div class="hcr-tag-7-6-0 TransferPill__tag___sBzcr">
+              <span class="hci-icon"></span><span class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">Bus</span>
+              <div class="TransferPill__transferTypeLabel___R7OUb TransferPill__withChanges___I0260">
+                Direct
+              </div>
+              <span class="hci-icon TransferPill__collapsed___h3Xt2 hcr-tag__icon-7-6-0"></span>
+            </div>
+          </div>
+          <div class="SearchResult__bookButtonWrap___bvz2p">
+            <div class="SearchResult__hideRoundBookButton___gRnPL">
+              <div class="RoundBookButton__roundButtonWrapper___XE_cU RoundBookButton__mobile___OJGZu SearchResult__bookButton___KC_GC">
+                <div class="Price__priceWrapper___eDs_Y">
+                  <span class="Price__voPriceText___HO0dB">$67.99</span><span class="RoundBookButton__iconOnlyCTAPrice___FRjpw">$67<sup>.99</sup></span>
+                </div>
+                <button type="button" class="hcr-btn-7-6-0 hcr-btn--secondary-7-6-0 hcr-btn--square-7-6-0 RoundBookButton__iconOnlyCTA___EK4X7" aria-label="Select this trip">
+                  <span class="hci-icon hcr-btn__icon-7-6-0"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="SearchResult__uspsAndCapacity___XucTk">
+            <div class="SearchResult__capacity___di8HI SearchResult__withDivider___hHjZX">
+              <div class="RideCapacity__busCapacity___VoHUl RideCapacity__hasLabel___ekPDc">
+                <span class="hci-icon RideCapacity__iconCapacity___mjkiC"></span><span class="RideCapacity__busCapacityText___xGKoW">Almost full</span>
+              </div>
+            </div>
+            <div class="SearchResult__usps___xQu9R">
+              <div class="Usps__uspIconContainers___LGw3v Usps__isMobile___XYcqi Usps__gray___j29Xg">
+                <span class="hci-icon Usps__icon___Tez9X"></span><span class="hci-icon Usps__icon___Tez9X"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  </body></html>
+    `
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.code) {
       case "Enter": onHandleGoTo(); break;
@@ -408,6 +2179,7 @@ const MockWindow = (props: { className: string, html?: string, title?: string })
     //     inputRef.current && inputRef.current.blur()
     // }, 1000)
   }
+  let param = "https://shop.greyhound.com/checkout"
 
   return (
     <div className={`mockup-window border bg-base-300 relative ${props.className}`}>
@@ -423,9 +2195,11 @@ const MockWindow = (props: { className: string, html?: string, title?: string })
           ref={inputRef}
         />
       </div>
+      {/* <iframe src="https://course.buct.edu.cn/" className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
+      {/* <object data={param} className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
       <div
         dangerouslySetInnerHTML={{ __html: props.html && typeof(props.html) === "string" ? props.html : defaultHTML }}
-        className="h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto p-4"
+        className="h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8"
       />
     </div>
   )

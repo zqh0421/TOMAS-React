@@ -48,7 +48,7 @@ const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unkno
   
   const handleStartRecording = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      const newMediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/mp4' });
+      const newMediaRecorder = new MediaRecorder(stream);
       setMediaRecorder(newMediaRecorder);
       
       newMediaRecorder.start();
@@ -59,9 +59,10 @@ const InputBox = (props: { onSend: Function, isSending: boolean}, ref: Ref<unkno
       };
       
       newMediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, { "type": "audio/mp4" });
+          const audioBlob = new Blob(audioChunks.current, { "type": "audio/webm" });
+          const audioFile = new Blob([audioBlob], { type: 'audio/webm' })
           const formData = new FormData();
-          formData.append('audio_chunk', audioBlob, 'recording.mp4')
+          formData.append('audio_chunk', audioFile, 'recording.webm')
           transcribeRecord(formData);
           audioChunks.current = [];
       };
