@@ -83,7 +83,7 @@ const MockWindow = (props: { className: string, html?: string, title?: string })
     //     inputRef.current && inputRef.current.blur()
     // }, 1000)
   }
-  let param = "https://shop.greyhound.com/checkout"
+//   let param = "https://shop.greyhound.com/checkout"
 
   return (
     <div className={`mockup-window border bg-base-300 relative ${props.className}`}>
