@@ -48,7 +48,6 @@ const InputBox = (
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.code) {
       case "Enter":
-        e.preventDefault();
         onSend();
         break;
       default:

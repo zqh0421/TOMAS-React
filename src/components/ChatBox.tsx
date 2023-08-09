@@ -84,8 +84,9 @@ const ChatBox = (props: {
   }, [shownChatList]);
 
   const handleSend = async () => {
-    const inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
+    let inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
     if (inputValue) {
+      inputValue = inputValue.trim();
       setIsSending(true);
       setShownChatList([...chatHistory, loadingMessage("HUMAN")]);
       try {
