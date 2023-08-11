@@ -4,7 +4,6 @@ import React, {
   useImperativeHandle,
   Ref,
   useRef,
-  useEffect,
 } from "react";
 import { Input } from "antd";
 import { StartRecord, StopRecord, Loading } from "./recordStatus";
