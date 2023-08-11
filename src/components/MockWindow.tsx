@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { Input, AutoComplete } from "antd";
 import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
 import { useState, useRef } from "react";
@@ -11,7 +11,7 @@ const MockWindow = (props: {
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const [inputValue, setInputValue] = useState("https://www.greyhound.com/");
+  const [inputValue, setInputValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const { setStage } = props;
   const inputRef = useRef<InputRef>(null);
@@ -109,7 +109,7 @@ const MockWindow = (props: {
       className={`mockup-window border bg-base-300 relative ${props.className}`}
     >
       <div className='absolute top-0 left-1/2 -translate-x-1/2 leading-[3rem] text-neutral-500'>
-        <Input
+        { inputValue ? <Input
           placeholder='Input URL here.'
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -128,7 +128,18 @@ const MockWindow = (props: {
           }
           disabled={isDisabled}
           ref={inputRef}
-        />
+        /> :
+        <AutoComplete
+          placeholder='Input URL here.'
+          value={inputValue}
+          options={[
+            { value: "https://www.greyhound.com" },
+            { value: "https://www.cinemark.com" },
+          ]}
+          onChange={(value) => setInputValue(value)}
+          style={{ width: "25vw" }}
+          
+        />}
       </div>
       {/* <iframe src="https://course.buct.edu.cn/" className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
       {/* <object data={param} className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
