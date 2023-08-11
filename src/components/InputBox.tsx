@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   Ref,
   useRef,
+  useEffect,
 } from "react";
 import { Input } from "antd";
 import { StartRecord, StopRecord, Loading } from "./recordStatus";
@@ -20,10 +21,15 @@ interface MyWindow extends Window {
   };
 }
 
+interface InputBoxProps {
+  onSend: Function
+  disabled: boolean
+}
+
 const { TextArea } = Input;
 
 const InputBox = (
-  props: { onSend: Function; isSending: boolean },
+  props: InputBoxProps,
   ref: Ref<unknown> | undefined
 ) => {
   const [inputValue, setInputValue] = useState("");
@@ -46,12 +52,14 @@ const InputBox = (
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    switch (e.code) {
-      case "Enter":
-        onSend();
-        break;
-      default:
-        break;
+    if (!props.disabled) {
+      switch (e.code) {
+        case "Enter":
+          onSend();
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -146,7 +154,7 @@ const InputBox = (
           onClick={() => {
             handleRecord();
           }}
-          disabled={recordStatus === 2 || props.isSending}
+          disabled={recordStatus === 2 || props.disabled}
         >
           {recordStatus === 0 ? (
             <StartRecord />
@@ -158,7 +166,7 @@ const InputBox = (
         </button>
         <button
           className='btn join-item h-[38px] min-h-[38px]'
-          disabled={props.isSending}
+          disabled={props.disabled}
           onClick={() => onSend()}
         >
           <svg

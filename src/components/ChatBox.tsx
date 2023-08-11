@@ -17,7 +17,6 @@ const ChatBox = (props: {
 }) => {
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
-  const [isSending, setIsSending] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [component, setComponent] = useState<ActionComponent | null>(null);
   const [actionValue, setActionValue] = useState<string>("");
@@ -36,7 +35,7 @@ const ChatBox = (props: {
     id: Math.floor(Math.random() * 1000).toString(),
     role: "AI",
     content:
-      "Currently AI cannot make response. After you refresh this page, this error message will disappear, it's not saved in our database.",
+      "There is some error here...",
   };
 
   const getChatHistory = async () => {
@@ -56,23 +55,14 @@ const ChatBox = (props: {
 
   useEffect(() => {
     setShownChatList(chatHistory);
-    // if (isProcessing) {
-    //   setShownChatList([...chatHistory, loadingMessage("AI")]);
-    //   setTimeout(() => {
-    //     console.log("Respond failed");
-    //     setShownChatList([...chatHistory, errorMessage]);
-    //     setIsProcessing(false);
-    //   }, 10000);
-    // }
   }, [chatHistory]);
 
   useEffect(() => {
-    console.log(props.stage);
+    console.log("Current stage: " + props.stage);
     if (props.stage === "navigate") {
       (async () => {
         setChatHistory(await getChatHistory());
-        setIsSending(false);
-        setIsProcessing(true);
+        setIsProcessing(false);
       })();
     }
   }, [props.stage]);
@@ -87,17 +77,17 @@ const ChatBox = (props: {
     let inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
     if (inputValue) {
       inputValue = inputValue.trim();
-      setIsSending(true);
-      setShownChatList([...chatHistory, loadingMessage("HUMAN")]);
+      setShownChatList([
+        ...chatHistory,
+        {
+          id: Math.floor(Math.random() * 1000).toString(),
+          role: "HUMAN",
+          content: inputValue,
+        },
+        loadingMessage("AI")
+      ]) // send user's message
+      setIsProcessing(true)
       try {
-        // sendMessage({ content: inputValue }).then(() => {
-        //   // currerntly res is empty
-        //   (async () => {
-        //     setChatHistory(await getChatHistory());
-        //     setIsSending(false);
-        //     setIsProcessing(true);
-        //   })();
-        // });
         if (props.stage === "navigate") {
           firstOrder({ content: inputValue }).then((res) => {
             props.setStage(res.type);
@@ -105,8 +95,7 @@ const ChatBox = (props: {
             if (res.actionValue) setActionValue(res.actionValue);
             (async () => {
               setChatHistory(await getChatHistory());
-              setIsSending(false);
-              setIsProcessing(true);
+              setIsProcessing(false);
             })();
           });
         } else if (props.stage === "questionForInput") {
@@ -118,12 +107,13 @@ const ChatBox = (props: {
                 if (res.actionValue) setActionValue(res.actionValue);
                 (async () => {
                   setChatHistory(await getChatHistory());
-                  setIsSending(false);
-                  setIsProcessing(true);
+                  setIsProcessing(false);
                 })();
               }
             );
           } else {
+            setShownChatList([...shownChatList, errorMessage])
+            setIsProcessing(false)
             throw new Error("Component is null");
           }
         } else if (props.stage === "questionForSelect") {
@@ -135,12 +125,13 @@ const ChatBox = (props: {
                 if (res.actionValue) setActionValue(res.actionValue);
                 (async () => {
                   setChatHistory(await getChatHistory());
-                  setIsSending(false);
-                  setIsProcessing(true);
+                  setIsProcessing(false);
                 })();
               }
             );
           } else {
+            setShownChatList([...shownChatList, errorMessage])
+            setIsProcessing(false)
             throw new Error("Component is null");
           }
         } else if (props.stage === "requestConfirmation") {
@@ -155,14 +146,17 @@ const ChatBox = (props: {
               if (res.actionValue) setActionValue(res.actionValue);
               (async () => {
                 setChatHistory(await getChatHistory());
-                setIsSending(false);
-                setIsProcessing(true);
+                setIsProcessing(false);
               })();
             });
           } else {
+            setShownChatList([...shownChatList, errorMessage])
+            setIsProcessing(false)
             throw new Error("Component is null");
           }
         } else {
+          setShownChatList([...shownChatList, errorMessage])
+          setIsProcessing(false)
           throw new Error(`Stage ${props.stage} is not defined`);
         }
       } catch (err) {
@@ -214,7 +208,7 @@ const ChatBox = (props: {
           ></path>
         </svg>
       </button>
-      <InputBox ref={inputRef} onSend={handleSend} isSending={isSending} />
+      <InputBox ref={inputRef} onSend={handleSend} disabled={isProcessing}/>
     </div>
   );
 };
