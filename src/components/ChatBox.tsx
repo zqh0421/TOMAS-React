@@ -14,11 +14,12 @@ const ChatBox = (props: {
   className: string;
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
+  component: ActionComponent | null,
+  setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
 }) => {
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [component, setComponent] = useState<ActionComponent | null>(null);
   const [actionValue, setActionValue] = useState<string>("");
   const inputRef = useRef<InputBoxRef>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -91,7 +92,7 @@ const ChatBox = (props: {
         if (props.stage === "navigate") {
           firstOrder({ content: inputValue }).then((res) => {
             props.setStage(res.type);
-            setComponent(res.component);
+            props.setComponent(res.component);
             if (res.actionValue) setActionValue(res.actionValue);
             (async () => {
               setChatHistory(await getChatHistory());
@@ -99,11 +100,11 @@ const ChatBox = (props: {
             })();
           });
         } else if (props.stage === "questionForInput") {
-          if (component) {
-            answerForInput({ content: inputValue, component: component }).then(
+          if (props.component) {
+            answerForInput({ content: inputValue, component: props.component }).then(
               (res) => {
                 props.setStage(res.type);
-                setComponent(res.component);
+                props.setComponent(res.component);
                 if (res.actionValue) setActionValue(res.actionValue);
                 (async () => {
                   setChatHistory(await getChatHistory());
@@ -117,11 +118,11 @@ const ChatBox = (props: {
             throw new Error("Component is null");
           }
         } else if (props.stage === "questionForSelect") {
-          if (component) {
-            answerForSelect({ content: inputValue, component: component }).then(
+          if (props.component) {
+            answerForSelect({ content: inputValue, component: props.component }).then(
               (res) => {
                 props.setStage(res.type);
-                setComponent(res.component);
+                props.setComponent(res.component);
                 if (res.actionValue) setActionValue(res.actionValue);
                 (async () => {
                   setChatHistory(await getChatHistory());
@@ -135,14 +136,14 @@ const ChatBox = (props: {
             throw new Error("Component is null");
           }
         } else if (props.stage === "requestConfirmation") {
-          if (component) {
+          if (props.component) {
             confirmAnswer({
               content: inputValue,
-              component: component,
+              component: props.component,
               actionValue: actionValue,
             }).then((res) => {
               props.setStage(res.type);
-              setComponent(res.component);
+              props.setComponent(res.component);
               if (res.actionValue) setActionValue(res.actionValue);
               (async () => {
                 setChatHistory(await getChatHistory());

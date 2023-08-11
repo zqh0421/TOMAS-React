@@ -90,7 +90,7 @@ const MockWindow = (props: {
       const result = await navigate({ url: inputValue });
       setStage(result.type);
       console.log("Send url to backend...");
-      setIsDisabled(false);
+      setIsDisabled(false); 
       inputRef.current && inputRef.current.blur();
     } catch (err) {
       console.error(err);
