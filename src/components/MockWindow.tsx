@@ -1,7 +1,7 @@
 import { Input, AutoComplete } from "antd";
 import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { navigate } from "../apis/chat";
 
 const MockWindow = (props: {
