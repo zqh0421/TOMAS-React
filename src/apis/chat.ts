@@ -136,3 +136,11 @@ export const confirmAnswer = async (request: {
   const result: AnswerResponse = await response.json();
   return result;
 };
+
+export const removeChat = async () => {
+  console.log("Removing the chat...");
+  const response = fetch("http://localhost:8000/api/chats", {
+    method: "DELETE",
+  });
+  return (await response).json();
+};
