@@ -103,7 +103,7 @@ const MockWindow = (props: {
     if (iAttribute && props.content) {
       // check whether it's in the action list
       // if it is, make the selection
-      const regex = /\(i=(\d+)\)\)/g;
+      const regex = /\(i=(\d+)\)/g;
       let k = 1;
       let match;
       const temp = new Map()
