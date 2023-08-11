@@ -13,6 +13,8 @@ function App() {
   const [stage, setStage] = useState("");
   const [curHTML, setCurHTML] = useState("")
   const [component, setComponent] = useState<ActionComponent | null>(null);
+  const [curContent, setCurContent] = useState<string | undefined>("")
+  const [inputValue, setInputValue] = useState("");
   useEffect(() => {
     if (stage === "questionForSelect") {
       setCurHTML(`<h1>${stage}</h1>${component && component.html!=null && component.html!=undefined && component.html}`)
@@ -27,8 +29,8 @@ function App() {
     <div className='flex flex-col h-screen max-h-[100vh]'>
       <NavBar className='flex-none' />
       <div className='flex flex-row mx-4 my-4 space-x-4 flex-grow overflow-auto'>
-        <MockWindow className='flex-1' stage={stage} setStage={setStage} html={curHTML} />
-        <ChatBox className='flex-1' stage={stage} setStage={setStage} component={component} setComponent={setComponent} />
+        <MockWindow className='flex-1' stage={stage} setStage={setStage} html={curHTML} content={curContent} setInputValue={setInputValue} />
+        <ChatBox className='flex-1' stage={stage} setStage={setStage} component={component} setComponent={setComponent} setCurContent={setCurContent} inputValue={inputValue} setInputValue={setInputValue}/>
       </div>
       <Footer className='flex-none' />
     </div>

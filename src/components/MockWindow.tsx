@@ -1,20 +1,23 @@
 import { Input, AutoComplete } from "antd";
 import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { navigate } from "../apis/chat";
 
 const MockWindow = (props: {
   className: string;
+  content?: string;
   html?: string;
   title?: string;
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
+  setInputValue?: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const { setStage } = props;
   const inputRef = useRef<InputRef>(null);
+  const [elements, setElements] = useState<Map<string, number>>(new Map())
   const suffix = (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -68,6 +71,21 @@ const MockWindow = (props: {
     </p>
   </body>
     `;
+  
+  useEffect(() => {
+    if (props.stage === "questionForSelect" && props.content) {
+      const regex = /\(i=(\d+)\)\)/g;
+      let k = 0;
+      let match;
+      const temp = new Map()
+      while ((match = regex.exec(props.content)) !== null) {
+        temp.set(match[1], k)
+        k += 1;
+      }
+      setElements(temp)
+    }
+  }, [props.stage])
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.code) {
       case "Enter":
@@ -75,8 +93,33 @@ const MockWindow = (props: {
         break;
       default:
         break;
+
     }
   };
+  const handleWindowClick = (e: React.MouseEvent) => {
+    if (props.stage !== "questionForSelect") return
+    console.log("clicked")
+    const iAttribute = (e.target as HTMLElement).getAttribute("i")
+    if (iAttribute && props.content) {
+      // check whether it's in the action list
+      // if it is, make the selection
+      const regex = /\(i=(\d+)\)\)/g;
+      let k = 1;
+      let match;
+      const temp = new Map()
+      while ((match = regex.exec(props.content)) !== null) {
+        temp.set(match[1], k)
+        k += 1;
+      }
+      temp.forEach((value, key) => {
+        if (key === iAttribute.toString()) {
+          console.log(iAttribute, value)
+          props.setInputValue && props.setInputValue(value.toString())
+          return
+        }
+      });
+    }
+  }
 
   const onHandleGoTo = async () => {
     if (!inputValue) {
@@ -96,13 +139,7 @@ const MockWindow = (props: {
       console.error(err);
       return [];
     }
-    // setTimeout(() => {
-    //     console.log("Send url to backend...")
-    //     setIsDisabled(false)
-    //     inputRef.current && inputRef.current.blur()
-    // }, 1000)
   };
-  //   let param = "https://shop.greyhound.com/checkout"
 
   return (
     <div
@@ -142,8 +179,6 @@ const MockWindow = (props: {
           autoFocus
         />}
       </div>
-      {/* <iframe src="https://course.buct.edu.cn/" className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
-      {/* <object data={param} className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}
       <div
         dangerouslySetInnerHTML={{
           __html:
@@ -152,6 +187,7 @@ const MockWindow = (props: {
               : defaultHTML,
         }}
         className='h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8'
+        onClick={(e) => handleWindowClick(e)}
       />
     </div>
   );

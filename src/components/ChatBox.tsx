@@ -16,6 +16,9 @@ const ChatBox = (props: {
   setStage: React.Dispatch<React.SetStateAction<string>>;
   component: ActionComponent | null,
   setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
+  setCurContent: React.Dispatch<React.SetStateAction<string | undefined>>;
+  inputValue: string
+  setInputValue: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
@@ -56,6 +59,7 @@ const ChatBox = (props: {
 
   useEffect(() => {
     setShownChatList(chatHistory);
+    if (chatHistory.length) props.setCurContent(chatHistory[chatHistory.length-1].content)
   }, [chatHistory]);
 
   useEffect(() => {
@@ -209,7 +213,7 @@ const ChatBox = (props: {
           ></path>
         </svg>
       </button>
-      <InputBox ref={inputRef} onSend={handleSend} disabled={isProcessing}/>
+      <InputBox ref={inputRef} onSend={handleSend} disabled={isProcessing} inputValue={props.inputValue} setInputValue={props.setInputValue}/>
     </div>
   );
 };

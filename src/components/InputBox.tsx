@@ -23,6 +23,8 @@ interface MyWindow extends Window {
 interface InputBoxProps {
   onSend: Function
   disabled: boolean
+  inputValue: string
+  setInputValue: React.Dispatch<React.SetStateAction<string>>
 }
 
 const { TextArea } = Input;
@@ -31,7 +33,6 @@ const InputBox = (
   props: InputBoxProps,
   ref: Ref<unknown> | undefined
 ) => {
-  const [inputValue, setInputValue] = useState("");
   const [recordStatus, setRecordStatus] = useState(0); // 0-start, 1-stop, 2-loading
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
@@ -39,12 +40,12 @@ const InputBox = (
 
   const audioChunks = useRef<Blob[]>([]);
   useImperativeHandle(ref, () => ({
-    getInputValue: () => inputValue,
-    clearInput: () => setInputValue(""),
+    getInputValue: () => props.inputValue,
+    clearInput: () => props.setInputValue(""),
   }));
 
   const onInputBoxChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
+    props.setInputValue(e.target.value);
   };
 
   const onSend = async () => {
@@ -66,7 +67,7 @@ const InputBox = (
   const transcribeRecord = async (formData: FormData) => {
     try {
       const data = JSON.parse(await transcribe({ formData }));
-      data.transcription && setInputValue(inputValue + data.transcription);
+      data.transcription && props.setInputValue(props.inputValue + data.transcription);
       setRecordStatus(0);
     } catch (err: any) {
       console.error(err);
@@ -145,7 +146,7 @@ const InputBox = (
           className='input join-item w-full text-lg focus:outline-none'
           style={{ maxHeight: "300px", lineHeight: "28px" }}
           placeholder='Chat with TOMAS...'
-          value={inputValue}
+          value={props.inputValue}
           onChange={(e) => onInputBoxChange(e)}
           onKeyUp={(e) => handleKeyPress(e)}
         />
