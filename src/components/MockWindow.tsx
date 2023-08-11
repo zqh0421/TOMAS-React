@@ -1,7 +1,7 @@
 import { Input, AutoComplete } from "antd";
 import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { navigate } from "../apis/chat";
 
 const MockWindow = (props: {
@@ -128,6 +128,7 @@ const MockWindow = (props: {
           }
           disabled={isDisabled}
           ref={inputRef}
+          autoFocus
         /> :
         <AutoComplete
           placeholder='Input URL here.'
@@ -138,7 +139,7 @@ const MockWindow = (props: {
           ]}
           onChange={(value) => setInputValue(value)}
           style={{ width: "25vw" }}
-          
+          autoFocus
         />}
       </div>
       {/* <iframe src="https://course.buct.edu.cn/" className="h-[calc(100%-1.75rem)] w-[100%] bg-base-200 overflow-y-auto"/> */}

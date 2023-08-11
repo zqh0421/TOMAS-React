@@ -36,6 +36,7 @@ const InputBox = (
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
+
   const audioChunks = useRef<Blob[]>([]);
   useImperativeHandle(ref, () => ({
     getInputValue: () => inputValue,
