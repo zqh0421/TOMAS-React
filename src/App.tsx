@@ -8,7 +8,7 @@ import { ChatItem } from "./components/ChatList";
 import { useEffect, useState } from "react";
 import type { ActionComponent, AnswerResponse } from "./apis/chat";
 import { getChat, confirmAnswer } from "./apis/chat";
-import { Modal, Button } from 'antd';
+// import { Modal, Button } from 'antd';
 
 function App() {
   const [stage, setStage] = useState("");
@@ -23,10 +23,6 @@ function App() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
 
-  const [open, setOpen] = useState(false);
-  const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
-  const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
-
   useEffect(() => {
     if (stage === "questionForSelect") {
       if (componentOrComponents === "component") {
@@ -39,7 +35,6 @@ function App() {
         <h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>
         <h2 class="text-3xl leading-loose font-bold">${curContent}</h2>
       `);
-      setOpen(true)
     } else if (stage) {
       console.log(component)
       setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1><h2 class="text-3xl leading-loose font-bold">${curContent}</h2>`)
@@ -76,28 +71,6 @@ function App() {
     })();
   }
 
-  const handleConfirmation = (response: string) => {
-    if (response === "YES") {
-      setConfirmLoadingYes(true)
-      component && confirmAnswer({
-        content: response,
-        component: component,
-        actionValue: actionValue,
-      }).then((res) => {
-        dataUpdate(res)
-        setConfirmLoadingYes(false)
-        setConfirmLoadingNo(false)
-        setOpen(false)
-      });
-    } else {
-      setInputValue("No, ")
-      setConfirmLoadingYes(false)
-      setConfirmLoadingNo(false)
-      setOpen(false)
-    }
-    console.log(response)
-  }
-
   return (
     <div className='flex flex-col h-screen max-h-[100vh]'>
       <NavBar className='flex-none' />
@@ -110,8 +83,10 @@ function App() {
           component={component} setComponent={setComponent}
           components={components} setComponents={setComponents}
           componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
+          isProcessing={isProcessing} setIsProcessing={setIsProcessing}
           setInputValue={setInputValue}
           dataUpdate={dataUpdate}
+          actionValue={actionValue}
         />
         <ChatBox
           className='flex-1'
@@ -128,7 +103,7 @@ function App() {
           actionValue={actionValue} setActionValue={setActionValue}
           getChatHistory={getChatHistory}
         />
-        <Modal
+        {/* <Modal
           title="Confirm"
           width={"50vw"}
           bodyStyle={{ padding: "30px"}}
@@ -142,7 +117,7 @@ function App() {
           ]}
         >
           <h2 className="text-3xl">{curContent}</h2>
-        </Modal>
+        </Modal> */}
       </div>
       <Footer className='flex-none' />
     </div>

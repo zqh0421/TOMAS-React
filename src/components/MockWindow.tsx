@@ -4,7 +4,7 @@ import { Loading } from "./recordStatus";
 import { useState, useRef, useEffect } from "react";
 import { navigate } from "../apis/chat";
 import type { ActionComponent } from "../apis/chat";
-import { answerForSelect } from "../apis/chat";
+import { answerForSelect, confirmAnswer } from "../apis/chat";
 
 const MockWindow = (props: {
   className: string;
@@ -20,12 +20,19 @@ const MockWindow = (props: {
   setComponents: React.Dispatch<React.SetStateAction<ActionComponent[] | null>>;
   componentOrComponents: "component" | "components" | "error";
   setComponentOrComponents: React.Dispatch<React.SetStateAction<"component" | "components" | "error">>;
+  isProcessing: boolean;
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
   dataUpdate: Function;
+  actionValue: string;
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const { setStage } = props;
   const inputRef = useRef<InputRef>(null);
+
+  const [open, setOpen] = useState(false);
+  const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
+  const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
   const suffix = (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -35,6 +42,33 @@ const MockWindow = (props: {
       <path d='M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM281 385c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l71-71L136 280c-13.3 0-24-10.7-24-24s10.7-24 24-24l182.1 0-71-71c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L393 239c9.4 9.4 9.4 24.6 0 33.9L281 385z' />
     </svg>
   );
+
+  useEffect(() => {
+    if (props.stage === "requestConfirmation") {
+      setOpen(true)
+    }
+  }, [props.html, props.stage])
+
+  const handleConfirmation = (response: string) => {
+    props.setIsProcessing(true)
+    if (response === "YES") {
+      setConfirmLoadingYes(true)
+    } else {
+      setConfirmLoadingNo(true)
+    }
+    props.component && confirmAnswer({
+      content: response,
+      component: props.component,
+      actionValue: props.actionValue,
+    }).then((res) => {
+      props.dataUpdate(res)
+      setConfirmLoadingYes(false)
+      setConfirmLoadingNo(false)
+      setOpen(false)
+      props.setIsProcessing(false)
+    });
+    console.log(response)
+  }
 
   const defaultHTML = `<h1>Empty</h1>`;
 
@@ -124,16 +158,34 @@ const MockWindow = (props: {
           autoFocus
         />}
       </div>
-      <div
-        dangerouslySetInnerHTML={{
-          __html:
-            props.html && typeof props.html === "string"
-              ? props.html
-              : defaultHTML,
-        }}
-        className='h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8'
-        onClick={(e) => handleWindowClick(e)}
-      />
+      <div className="h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8">
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              props.html && typeof props.html === "string"
+                ? props.html
+                : defaultHTML,
+          }}
+          className='bg-base-200'
+          onClick={(e) => handleWindowClick(e)}
+        />
+        <div className={`w-full flex justify-around my-4 ${open ? "block" : "hidden"}`}>
+          <button
+            onClick={() => handleConfirmation("YES")}
+            className={`btn btn-outline btn-md btn-wide ${confirmLoadingNo ? "btn-disabled" : ""}`}
+            disabled={confirmLoadingYes || confirmLoadingNo}
+          >
+            YES {confirmLoadingYes && <Loading />}
+          </button>
+          <button
+            onClick={() => handleConfirmation("NO")}
+            className={`btn btn-outline btn-md btn-wide ${confirmLoadingYes ? "btn-disabled" : ""}`}
+            disabled={confirmLoadingYes || confirmLoadingNo}
+          >
+            NO {confirmLoadingNo && <Loading />}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
