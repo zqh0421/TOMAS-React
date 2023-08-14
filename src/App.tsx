@@ -30,7 +30,7 @@ function App() {
         setCurHTML(`<h1>${stage}</h1>${components!=null && components.map(component => component.html)}`)
       }
     } else if (stage) {
-      setCurHTML(`<h1>${stage}</h1>`)
+      setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1><h2 class="text-2xl leading-loose font-bold">${curContent}</h2>`)
     } else {
       setCurHTML(`<h1>Empty</h1>`)
     }
