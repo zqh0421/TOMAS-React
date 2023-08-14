@@ -57,7 +57,7 @@ const MockWindow = (props: {
       setConfirmLoadingNo(true)
     }
     props.component && confirmAnswer({
-      content: response,
+      content: response.toLowerCase(),
       component: props.component,
       actionValue: props.actionValue,
     }).then((res) => {
