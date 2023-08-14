@@ -36,49 +36,7 @@ const MockWindow = (props: {
     </svg>
   );
 
-  const defaultHTML = `<body class="text-lg font-normal text-black bg-white">
-    <h1 class="text-4xl font-bold">Bus Schedule from NY</h1>
-    <table class="table-auto w-full mt-8">
-      <thead>
-        <tr>
-          <th class="px-4 py-2 font-bold">Bus Company</th>
-          <th class="px-4 py-2 font-bold">Departure Time</th>
-          <th class="px-4 py-2 font-bold">Duration</th>
-          <th class="px-4 py-2 font-bold">Arrival Time</th>
-          <th class="px-4 py-2 font-bold">Departure Stop</th>
-          <th class="px-4 py-2 font-bold">Arrival Stop</th>
-          <th class="px-4 py-2 font-bold">Seats Available</th>
-          <th class="px-4 py-2 font-bold">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="border px-4 py-2">FlixBus</td>
-          <td class="border px-4 py-2">1:20 pm</td>
-          <td class="border px-4 py-2">6:10 hrs</td>
-          <td class="border px-4 py-2">7:30 pm</td>
-          <td class="border px-4 py-2">Downey (Stonewood Center)</td>
-          <td class="border px-4 py-2">Las Vegas Strip (Las Vegas Blvd)</td>
-          <td class="border px-4 py-2">Only 1 seat available!</td>
-          <td class="border px-4 py-2">$88.99</td>
-        </tr>
-        <tr>
-          <td class="border px-4 py-2">FlixBus</td>
-          <td class="border px-4 py-2">1:20 pm</td>
-          <td class="border px-4 py-2">6:35 hrs</td>
-          <td class="border px-4 py-2">7:55 pm</td>
-          <td class="border px-4 py-2">Downey (Stonewood Center)</td>
-          <td class="border px-4 py-2">Downtown Las Vegas (1st St)</td>
-          <td class="border px-4 py-2">Only 1 seat available!</td>
-          <td class="border px-4 py-2">$88.99</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="mt-8">
-      <a href="#" class="underline text-blue-600">Click here</a> for more information.
-    </p>
-  </body>
-    `;
+  const defaultHTML = `<h1>Empty</h1>`;
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.code) {
@@ -90,6 +48,7 @@ const MockWindow = (props: {
 
     }
   };
+
   const handleWindowClick = (e: React.MouseEvent) => {
     if (props.stage !== "questionForSelect") return
     console.log("clicked")

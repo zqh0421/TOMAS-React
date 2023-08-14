@@ -7,7 +7,8 @@ import ChatBox from "./components/ChatBox";
 import { ChatItem } from "./components/ChatList";
 import { useEffect, useState } from "react";
 import type { ActionComponent, AnswerResponse } from "./apis/chat";
-import { getChat } from "./apis/chat";
+import { getChat, confirmAnswer } from "./apis/chat";
+import { Modal, Button } from 'antd';
 
 function App() {
   const [stage, setStage] = useState("");
@@ -22,19 +23,30 @@ function App() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
 
+  const [open, setOpen] = useState(false);
+  const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
+  const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
+
   useEffect(() => {
     if (stage === "questionForSelect") {
       if (componentOrComponents === "component") {
-        setCurHTML(`<h1>${stage}</h1>${component && component.html!=null && component.html!=undefined && component.html}`)
+        setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>${component && component.html!=null && component.html!=undefined && component.html}`)
       } else if (componentOrComponents === "components") {
         setCurHTML(`<h1>${stage}</h1>${components!=null && components.map(component => component.html)}`)
       }
+    } else if (stage === "requestConfirmation") {
+      setCurHTML(`
+        <h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>
+        <h2 class="text-3xl leading-loose font-bold">${curContent}</h2>
+      `);
+      setOpen(true)
     } else if (stage) {
-      setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1><h2 class="text-2xl leading-loose font-bold">${curContent}</h2>`)
+      console.log(component)
+      setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1><h2 class="text-3xl leading-loose font-bold">${curContent}</h2>`)
     } else {
       setCurHTML(`<h1>Empty</h1>`)
     }
-  }, [stage])
+  }, [stage, curContent])
 
   const getChatHistory = async () => {
     try {
@@ -62,6 +74,28 @@ function App() {
       setChatHistory(await getChatHistory());
       setIsProcessing(false);
     })();
+  }
+
+  const handleConfirmation = (response: string) => {
+    if (response === "YES") {
+      setConfirmLoadingYes(true)
+      component && confirmAnswer({
+        content: response,
+        component: component,
+        actionValue: actionValue,
+      }).then((res) => {
+        dataUpdate(res)
+        setConfirmLoadingYes(false)
+        setConfirmLoadingNo(false)
+        setOpen(false)
+      });
+    } else {
+      setInputValue("No, ")
+      setConfirmLoadingYes(false)
+      setConfirmLoadingNo(false)
+      setOpen(false)
+    }
+    console.log(response)
   }
 
   return (
@@ -94,6 +128,21 @@ function App() {
           actionValue={actionValue} setActionValue={setActionValue}
           getChatHistory={getChatHistory}
         />
+        <Modal
+          title="Confirm"
+          width={"50vw"}
+          bodyStyle={{ padding: "30px"}}
+          open={open}
+          keyboard={false}
+          closable={false}
+          closeIcon={false}
+          footer={[
+            <Button loading={confirmLoadingYes} disabled={confirmLoadingNo} onClick={() => handleConfirmation("YES")}>YES</Button>,
+            <Button loading={confirmLoadingNo} disabled={confirmLoadingYes} onClick={() => handleConfirmation("NO")}>NO</Button>
+          ]}
+        >
+          <h2 className="text-3xl">{curContent}</h2>
+        </Modal>
       </div>
       <Footer className='flex-none' />
     </div>
