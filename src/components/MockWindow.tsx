@@ -84,15 +84,17 @@ const MockWindow = (props: {
   };
 
   const handleWindowClick = (e: React.MouseEvent) => {
+    if (props.isProcessing) return
     if (props.stage !== "questionForSelect") return
-    console.log("clicked")
     const iAttribute = (e.target as HTMLElement).getAttribute("i")
     console.log(iAttribute)
     props.components?.forEach((component) => {
       if (component.i === iAttribute) {
+        props.setIsProcessing(true)
         answerForSelect({ content: component.description, component: component }).then(
           (res) => {
             props.dataUpdate(res)
+            props.setIsProcessing(false)
           }
         );
         return
