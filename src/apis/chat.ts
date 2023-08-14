@@ -46,13 +46,14 @@ export type ActionType = "select" | "input" | "click" | "focus" | "item";
 export type ActionComponent = {
   i: string;
   actionType: ActionType;
-  description?: string;
+  description: string;
   html: string;
 };
 
-interface AnswerResponse {
+export type AnswerResponse = {
   type: string;
-  component: ActionComponent;
+  component?: ActionComponent;
+  components?: ActionComponent[];
   actionValue?: string;
 }
 
@@ -138,7 +139,7 @@ export const confirmAnswer = async (request: {
 };
 
 export const removeChat = async () => {
-  console.log("Removing the chat...");
+  console.log("Remove the chat...");
   const response = fetch("http://localhost:8000/api/chats", {
     method: "DELETE",
   });

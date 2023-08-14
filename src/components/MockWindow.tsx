@@ -3,6 +3,8 @@ import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
 import { useState, useRef, useEffect } from "react";
 import { navigate } from "../apis/chat";
+import type { ActionComponent } from "../apis/chat";
+import { answerForSelect } from "../apis/chat";
 
 const MockWindow = (props: {
   className: string;
@@ -12,12 +14,18 @@ const MockWindow = (props: {
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
   setInputValue?: React.Dispatch<React.SetStateAction<string>>;
+  component: ActionComponent | null;
+  setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
+  components: ActionComponent[] | null;
+  setComponents: React.Dispatch<React.SetStateAction<ActionComponent[] | null>>;
+  componentOrComponents: "component" | "components" | "error";
+  setComponentOrComponents: React.Dispatch<React.SetStateAction<"component" | "components" | "error">>;
+  dataUpdate: Function;
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const { setStage } = props;
   const inputRef = useRef<InputRef>(null);
-  const [elements, setElements] = useState<Map<string, number>>(new Map())
   const suffix = (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -71,20 +79,6 @@ const MockWindow = (props: {
     </p>
   </body>
     `;
-  
-  useEffect(() => {
-    if (props.stage === "questionForSelect" && props.content) {
-      const regex = /\(i=(\d+)\)\)/g;
-      let k = 0;
-      let match;
-      const temp = new Map()
-      while ((match = regex.exec(props.content)) !== null) {
-        temp.set(match[1], k)
-        k += 1;
-      }
-      setElements(temp)
-    }
-  }, [props.stage])
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (e.code) {
@@ -100,25 +94,17 @@ const MockWindow = (props: {
     if (props.stage !== "questionForSelect") return
     console.log("clicked")
     const iAttribute = (e.target as HTMLElement).getAttribute("i")
-    if (iAttribute && props.content) {
-      // check whether it's in the action list
-      // if it is, make the selection
-      const regex = /\(i=(\d+)\)/g;
-      let k = 1;
-      let match;
-      const temp = new Map()
-      while ((match = regex.exec(props.content)) !== null) {
-        temp.set(match[1], k)
-        k += 1;
+    console.log(iAttribute)
+    props.components?.forEach((component) => {
+      if (component.i === iAttribute) {
+        answerForSelect({ content: component.description, component: component }).then(
+          (res) => {
+            props.dataUpdate(res)
+          }
+        );
+        return
       }
-      temp.forEach((value, key) => {
-        if (key === iAttribute.toString()) {
-          console.log(iAttribute, value)
-          props.setInputValue && props.setInputValue(value.toString())
-          return
-        }
-      });
-    }
+    })
   }
 
   const onHandleGoTo = async () => {

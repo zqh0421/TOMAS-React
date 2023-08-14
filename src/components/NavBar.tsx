@@ -1,8 +1,8 @@
 import { removeChat } from "../apis/chat";
 const NavBar = (props: { className: string }) => {
 
-  const deleteCurrentChat = () => {
-    removeChat()
+  const deleteCurrentChat = async () => {
+    await removeChat()
     window.location.reload()
   }
   return (
