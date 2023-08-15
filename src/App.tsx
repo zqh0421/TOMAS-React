@@ -20,6 +20,7 @@ function App() {
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
+  const [open, setOpen] = useState<"confirm" | "input" | "">("");
   const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
@@ -67,6 +68,8 @@ function App() {
           actionValue={actionValue}
           onSend={sendRef.current?.handleSend}
           handleKeyPress={sendRef.current?.handleKeyPress}
+          open={open}
+          setOpen={setOpen}
         />
         <ChatBox
           className='flex-1'
@@ -83,6 +86,7 @@ function App() {
           actionValue={actionValue} setActionValue={setActionValue}
           getChatHistory={getChatHistory}
           ref={sendRef}
+          setOpen={setOpen}
         />
       </div>
       <dialog id='transcriptionNotSupportedModal' className='modal'>

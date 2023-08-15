@@ -33,6 +33,7 @@ const InputBox = (
   }));
 
   const onInputBoxChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (props.disabled) return
     props.setInputValue(e.target.value);
   };
 
@@ -59,6 +60,7 @@ const InputBox = (
           value={props.inputValue}
           onChange={(e) => onInputBoxChange(e)}
           onKeyUp={(e) => handleKeyPress(e)}
+          disabled={props.disabled}
         />
         <RecordBtn
           inputValue={props.inputValue} setInputValue={props.setInputValue}

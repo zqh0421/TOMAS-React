@@ -38,6 +38,7 @@ interface ChatBoxProps {
   actionValue: string;
   setActionValue: React.Dispatch<React.SetStateAction<string>>;
   getChatHistory: Function;
+  setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
 }
 
 const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
@@ -105,6 +106,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
       setChatHistory(await getChatHistory());
       setIsProcessing(false);
     })();
+    props.setOpen("")
   }
 
   useImperativeHandle(ref, () => ({

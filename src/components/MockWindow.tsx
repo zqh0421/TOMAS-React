@@ -29,14 +29,14 @@ const MockWindow = (props: {
   actionValue: string;
   onSend: Function | undefined;
   handleKeyPress: Function | undefined;
+  open: "input" | "confirm" | "";
+  setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
 }) => {
   const [urlValue, setUrlValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [html, setHtml] = useState<string>("")
-  const { content, stage, setStage } = props;
+  const { content, stage, setStage, open, setOpen } = props;
   const inputRef = useRef<InputRef>(null);
-
-  const [open, setOpen] = useState<"confirm" | "input" | "">("");
   const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
   const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
   const suffix = (
@@ -231,10 +231,9 @@ const MockWindow = (props: {
                   className="btn-circle btn-ghost btn-lg"
                 />
                 <SendBtn
-                  onSend={() => {
+                  onSend={async () => {
                     if (props.onSend) {
-                      props.onSend()
-                      setOpen("")
+                      await props.onSend()
                     } else {
                       console.error("Sending ERROR!")
                     }
@@ -249,12 +248,13 @@ const MockWindow = (props: {
               style={{ padding: "16px 8px", minHeight: "60px", maxHeight: "300px", lineHeight: "28px" }}
               placeholder='Chat with TOMAS...'
               value={props.inputValue}
-              onChange={(e) => props.setInputValue(e.target.value)}
+              onChange={(e) => !props.isProcessing && props.setInputValue(e.target.value)}
               onKeyUp={(e) => {
                 if (props && props.handleKeyPress) {
                   props.handleKeyPress(e)
                 }
               }}
+              disabled={props.isProcessing}
             />
           </div>
         </div>
