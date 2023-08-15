@@ -6,6 +6,7 @@ import { navigate } from "../apis/chat";
 import type { ActionComponent } from "../apis/chat";
 import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
+import SendBtn from "./SendBtn";
 
 const { TextArea } = Input;
 
@@ -26,6 +27,8 @@ const MockWindow = (props: {
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
   dataUpdate: Function;
   actionValue: string;
+  onSend: Function | undefined;
+  handleKeyPress: Function | undefined;
 }) => {
   const [urlValue, setUrlValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
@@ -55,7 +58,6 @@ const MockWindow = (props: {
         elements.forEach((element, index) => {
           element.setAttribute('interactive_i', component.i)
         })
-        console.log(doc.outerHTML)
         return doc.outerHTML
       })}`)
     } else if (stage === "requestConfirmation") {
@@ -64,6 +66,10 @@ const MockWindow = (props: {
       `);
       setOpen("confirm")
     } else if (stage==="questionForInput") {
+      setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`)
+      setOpen("input")
+    } else if (stage==="navigate") {
+      setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`)
       setOpen("input")
     } else if (stage) {
       console.log(props.component)
@@ -191,7 +197,7 @@ const MockWindow = (props: {
           }}
           className='bg-base-200'
         />
-        <div className={`${open!=="" ? "grid grid-rows-2" : ""}`}>
+        <div className={`flex flex-col gap-6 mt-12`}>
           <div
             dangerouslySetInnerHTML={{
               __html:
@@ -217,42 +223,39 @@ const MockWindow = (props: {
             </button>
           </div>
           <div className={`w-full flex flex-col justify-around items-center gap-6 my-4 ${open==="input" ? "block" : "hidden"}`}>
-            <RecordBtn
-              inputValue={props.inputValue}
-              setInputValue={props.setInputValue}
-              disabled={props.isProcessing}
-              className="btn-circle btn-ghost btn-lg"
-            />
-            <div>
+            <div className="grid grid-cols-2 gap-20">
+                <RecordBtn
+                  inputValue={props.inputValue}
+                  setInputValue={props.setInputValue}
+                  disabled={props.isProcessing}
+                  className="btn-circle btn-ghost btn-lg"
+                />
+                <SendBtn
+                  onSend={() => {
+                    if (props.onSend) {
+                      props.onSend()
+                      setOpen("")
+                    } else {
+                      console.error("Sending ERROR!")
+                    }
+                  }}
+                  disabled={props.isProcessing && props.inputValue.trim().length <= 0}
+                  className="btn-circle btn-ghost btn-lg"
+                />
+            </div>
             <TextArea
               autoSize={true}
-              className='input w-[30vw] text-lg focus:outline-none'
-              style={{ maxHeight: "300px", lineHeight: "28px" }}
+              className='input w-[30vw] text-xl focus:outline-none'
+              style={{ padding: "16px 8px", minHeight: "60px", maxHeight: "300px", lineHeight: "28px" }}
               placeholder='Chat with TOMAS...'
               value={props.inputValue}
               onChange={(e) => props.setInputValue(e.target.value)}
-              onKeyUp={(e) => handleKeyPress(e)}
+              onKeyUp={(e) => {
+                if (props && props.handleKeyPress) {
+                  props.handleKeyPress(e)
+                }
+              }}
             />
-                
-                {/* <button
-                  className='btn join-item h-[38px] min-h-[38px]'
-                  disabled={props.disabled}
-                  onClick={() => onSend()}
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='inline-block w-5 h-5 stroke-current'
-                    viewBox='0 0 384 512'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z'
-                    />
-                  </svg>
-                </button> */}
-            </div>
           </div>
         </div>
       </div>

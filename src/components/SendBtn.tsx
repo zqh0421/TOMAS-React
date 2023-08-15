@@ -6,13 +6,13 @@ const SendBtn = (props: {
 
   return (
     <button
-      className={`btn ${props.className}`}
+      className={`btn flex justify-center items-center ${props.className}`}
       disabled={props.disabled}
       onClick={() => props.onSend()}
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        className='inline-block w-5 h-5 stroke-current'
+        className='inline-block h-3/5 stroke-current'
         viewBox='0 0 384 512'
       >
         <path

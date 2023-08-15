@@ -4,9 +4,10 @@ import Footer from "./components/Footer";
 import MockWindow from "./components/MockWindow";
 import ChatBox from "./components/ChatBox";
 import { ChatItem } from "./components/ChatList";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { ActionComponent, AnswerResponse } from "./apis/chat";
 import { getChat } from "./apis/chat";
+import { SendRef } from "./components/ChatBox";
 
 function App() {
   const [stage, setStage] = useState("");
@@ -19,6 +20,7 @@ function App() {
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
+  const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
     try {
@@ -63,6 +65,8 @@ function App() {
           inputValue={inputValue} setInputValue={setInputValue}
           dataUpdate={dataUpdate}
           actionValue={actionValue}
+          onSend={sendRef.current?.handleSend}
+          handleKeyPress={sendRef.current?.handleKeyPress}
         />
         <ChatBox
           className='flex-1'
@@ -78,6 +82,7 @@ function App() {
           isProcessing={isProcessing} setIsProcessing={setIsProcessing}
           actionValue={actionValue} setActionValue={setActionValue}
           getChatHistory={getChatHistory}
+          ref={sendRef}
         />
       </div>
       <dialog id='transcriptionNotSupportedModal' className='modal'>

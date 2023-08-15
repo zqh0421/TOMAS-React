@@ -9,6 +9,7 @@ import SendBtn from "./SendBtn";
 
 export interface InputBoxRef {
   getInputValue: () => string | undefined;
+  handleKeyPress: (e: React.KeyboardEvent) => void;
   clearInput: () => void;
 }
 
@@ -27,6 +28,7 @@ const InputBox = (
 ) => {
   useImperativeHandle(ref, () => ({
     getInputValue: () => props.inputValue,
+    handleKeyPress: (e: React.KeyboardEvent) => handleKeyPress(e),
     clearInput: () => props.setInputValue(""),
   }));
 

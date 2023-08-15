@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useImperativeHandle, forwardRef, Ref } from "react";
 import ChatList, { ChatItem } from "./ChatList";
 import InputBox, { InputBoxRef } from "./InputBox";
 import {
@@ -10,7 +10,12 @@ import {
   AnswerResponse
 } from "../apis/chat";
 
-const ChatBox = (props: {
+export interface SendRef {
+  handleSend: () => void,
+  handleKeyPress: (e: React.KeyboardEvent) => void
+}
+
+interface ChatBoxProps {
   className: string;
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
@@ -33,7 +38,9 @@ const ChatBox = (props: {
   actionValue: string;
   setActionValue: React.Dispatch<React.SetStateAction<string>>;
   getChatHistory: Function;
-}) => {
+}
+
+const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
   const { chatHistory, setChatHistory, shownChatList, setShownChatList, isProcessing, setIsProcessing, actionValue, setActionValue, getChatHistory } = props
   const inputRef = useRef<InputBoxRef>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -99,6 +106,16 @@ const ChatBox = (props: {
       setIsProcessing(false);
     })();
   }
+
+  useImperativeHandle(ref, () => ({
+    handleSend: () => handleSend(),
+    handleKeyPress: (e: React.KeyboardEvent) => {
+      if (inputRef && inputRef.current) {
+        inputRef.current.handleKeyPress(e)
+      }
+      
+    }, 
+  }));
 
   const handleSend = async () => {
     let inputValue = inputRef.current?.getInputValue(); // Access the inputValue using the ref
@@ -216,4 +233,4 @@ const ChatBox = (props: {
   );
 };
 
-export default ChatBox;
+export default forwardRef(ChatBox);
