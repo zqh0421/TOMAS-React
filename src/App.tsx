@@ -1,18 +1,15 @@
-// import { useState } from 'react'
 import "./App.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import MockWindow from "./components/MockWindow";
 import ChatBox from "./components/ChatBox";
 import { ChatItem } from "./components/ChatList";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ActionComponent, AnswerResponse } from "./apis/chat";
-import { getChat, confirmAnswer } from "./apis/chat";
-// import { Modal, Button } from 'antd';
+import { getChat } from "./apis/chat";
 
 function App() {
   const [stage, setStage] = useState("");
-  const [curHTML, setCurHTML] = useState("")
   const [component, setComponent] = useState<ActionComponent | null>(null);
   const [components, setComponents] = useState<ActionComponent[] | null>(null);
   const [componentOrComponents, setComponentOrComponents] = useState<"component" | "components" | "error">("error");
@@ -22,26 +19,6 @@ function App() {
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
-
-  useEffect(() => {
-    if (stage === "questionForSelect") {
-      if (componentOrComponents === "component") {
-        setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>${component && component.html!=null && component.html!=undefined && component.html}`)
-      } else if (componentOrComponents === "components") {
-        setCurHTML(`<h1>${stage}</h1>${components!=null && components.map(component => component.html)}`)
-      }
-    } else if (stage === "requestConfirmation") {
-      setCurHTML(`
-        <h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>
-        <h2 class="text-3xl leading-loose font-bold">${curContent}</h2>
-      `);
-    } else if (stage) {
-      console.log(component)
-      setCurHTML(`<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1><h2 class="text-3xl leading-loose font-bold">${curContent}</h2>`)
-    } else {
-      setCurHTML(`<h1>Empty</h1>`)
-    }
-  }, [stage, curContent])
 
   const getChatHistory = async () => {
     try {
@@ -78,13 +55,12 @@ function App() {
         <MockWindow
           className='flex-1'
           stage={stage} setStage={setStage}
-          html={curHTML}
           content={curContent}
           component={component} setComponent={setComponent}
           components={components} setComponents={setComponents}
           componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
           isProcessing={isProcessing} setIsProcessing={setIsProcessing}
-          setInputValue={setInputValue}
+          inputValue={inputValue} setInputValue={setInputValue}
           dataUpdate={dataUpdate}
           actionValue={actionValue}
         />
@@ -103,22 +79,19 @@ function App() {
           actionValue={actionValue} setActionValue={setActionValue}
           getChatHistory={getChatHistory}
         />
-        {/* <Modal
-          title="Confirm"
-          width={"50vw"}
-          bodyStyle={{ padding: "30px"}}
-          open={open}
-          keyboard={false}
-          closable={false}
-          closeIcon={false}
-          footer={[
-            <Button loading={confirmLoadingYes} disabled={confirmLoadingNo} onClick={() => handleConfirmation("YES")}>YES</Button>,
-            <Button loading={confirmLoadingNo} disabled={confirmLoadingYes} onClick={() => handleConfirmation("NO")}>NO</Button>
-          ]}
-        >
-          <h2 className="text-3xl">{curContent}</h2>
-        </Modal> */}
       </div>
+      <dialog id='transcriptionNotSupportedModal' className='modal'>
+        <form method='dialog' className='modal-box'>
+          <h3 className='font-bold text-lg'>Notice</h3>
+          <p className='py-4'>
+            Your browser is not supported for transcription. Please use Google
+            Chrome or Microsoft Edge instead.
+          </p>
+          <div className='modal-action'>
+            <button className='btn'>Close</button>
+          </div>
+        </form>
+      </dialog>
       <Footer className='flex-none' />
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import ChatList, { ChatItem } from "./ChatList";
 import InputBox, { InputBoxRef } from "./InputBox";
 import {
@@ -7,9 +7,9 @@ import {
   answerForSelect,
   confirmAnswer,
   firstOrder,
-  getChat,
   AnswerResponse
 } from "../apis/chat";
+
 const ChatBox = (props: {
   className: string;
   stage: string;

@@ -2,7 +2,7 @@ export function StartRecord() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="inline-block w-5 h-5 stroke-current"
+      className="inline-block h-3/5 stroke-current"
       viewBox="0 0 384 512">
       <path
         strokeLinecap="round"
@@ -18,7 +18,7 @@ export function StopRecord() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="inline-block w-5 h-5 stroke-current"
+      className="inline-block h-3/5 stroke-current"
       viewBox="0 0 384 512">
       <path
         strokeLinecap="round"
