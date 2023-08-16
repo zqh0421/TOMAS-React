@@ -7,6 +7,7 @@ import type { ActionComponent } from "../apis/chat";
 import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
 import SendBtn from "./SendBtn";
+import { motion } from 'framer-motion';
 
 const { TextArea } = Input;
 
@@ -31,6 +32,7 @@ const MockWindow = (props: {
   handleKeyPress: Function | undefined;
   open: "input" | "confirm" | "";
   setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
+  isChatShown: boolean;
 }) => {
   const [urlValue, setUrlValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
@@ -155,7 +157,10 @@ const MockWindow = (props: {
     <div
       className={`mockup-window border bg-base-300 relative ${props.className}`}
     >
-      <div className='absolute top-0 left-1/2 -translate-x-1/2 leading-[3rem] text-neutral-500'>
+      <motion.div
+        layout
+        className='absolute top-0 left-[calc(50%-12.5vw)] leading-[3rem] text-neutral-500'
+      >
         { urlValue ? <Input
           placeholder='Input URL here.'
           value={urlValue}
@@ -188,12 +193,12 @@ const MockWindow = (props: {
           style={{ width: "25vw" }}
           autoFocus
         />}
-      </div>
+      </motion.div>
       <div className="h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8">
         <div
           dangerouslySetInnerHTML={{
             __html:
-              stage ? `<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>` : `<h1>Empty</h1>`
+              urlValue ? stage ? `<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>` : `<h1>Empty</h1>` : `Please input the URL above.`
           }}
           className='bg-base-200'
         />

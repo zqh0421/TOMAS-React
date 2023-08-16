@@ -8,6 +8,7 @@ import { useState, useRef } from "react";
 import type { ActionComponent, AnswerResponse } from "./apis/chat";
 import { getChat } from "./apis/chat";
 import { SendRef } from "./components/ChatBox";
+import { motion } from 'framer-motion';
 
 function App() {
   const [stage, setStage] = useState("");
@@ -21,6 +22,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
   const [open, setOpen] = useState<"confirm" | "input" | "">("");
+  const [isChatShown, setIsChatShown] = useState(true)
   const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
@@ -53,41 +55,64 @@ function App() {
 
   return (
     <div className='flex flex-col h-screen max-h-[100vh]'>
-      <NavBar className='flex-none' />
+      <NavBar
+        className='flex-none'
+        isChatShown={isChatShown}
+        setIsChatShown={setIsChatShown}
+      />
       <div className='flex flex-row mx-4 my-4 space-x-4 flex-grow overflow-auto'>
-        <MockWindow
-          className='flex-1'
-          stage={stage} setStage={setStage}
-          content={curContent}
-          component={component} setComponent={setComponent}
-          components={components} setComponents={setComponents}
-          componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
-          isProcessing={isProcessing} setIsProcessing={setIsProcessing}
-          inputValue={inputValue} setInputValue={setInputValue}
-          dataUpdate={dataUpdate}
-          actionValue={actionValue}
-          onSend={sendRef.current?.handleSend}
-          handleKeyPress={sendRef.current?.handleKeyPress}
-          open={open}
-          setOpen={setOpen}
-        />
-        <ChatBox
-          className='flex-1'
-          stage={stage} setStage={setStage}
-          component={component} setComponent={setComponent}
-          components={components} setComponents={setComponents}
-          componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
-          setCurContent={setCurContent}
-          dataUpdate={dataUpdate}
-          inputValue={inputValue} setInputValue={setInputValue}
-          chatHistory={chatHistory} setChatHistory={setChatHistory}
-          shownChatList={shownChatList} setShownChatList={setShownChatList}
-          isProcessing={isProcessing} setIsProcessing={setIsProcessing}
-          actionValue={actionValue} setActionValue={setActionValue}
-          getChatHistory={getChatHistory}
-          ref={sendRef}
-          setOpen={setOpen}
-        />
+        <motion.div
+          style={{
+            width: isChatShown ? "fit-content" : '100%',
+          }}
+          className={`flex-1 w-full h-full`}
+        >
+          <MockWindow
+            className='h-full'
+            stage={stage} setStage={setStage}
+            content={curContent}
+            component={component} setComponent={setComponent}
+            components={components} setComponents={setComponents}
+            componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
+            isProcessing={isProcessing} setIsProcessing={setIsProcessing}
+            inputValue={inputValue} setInputValue={setInputValue}
+            dataUpdate={dataUpdate}
+            actionValue={actionValue}
+            onSend={sendRef.current?.handleSend}
+            handleKeyPress={sendRef.current?.handleKeyPress}
+            open={open}
+            setOpen={setOpen}
+            isChatShown={isChatShown}
+          />
+        </motion.div>
+        <motion.div
+          layout
+          style={{
+            width: isChatShown ? "fit-content" : 0,
+            visibility: isChatShown ? "initial" : "hidden",
+            overflow: isChatShown ? "initial" : "hidden",
+            flex: isChatShown ? "1" : "none"
+          }}
+          className={`h-full`}
+        >
+          <ChatBox
+            className={"flex-1 h-full"}
+            stage={stage} setStage={setStage}
+            component={component} setComponent={setComponent}
+            components={components} setComponents={setComponents}
+            componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
+            setCurContent={setCurContent}
+            dataUpdate={dataUpdate}
+            inputValue={inputValue} setInputValue={setInputValue}
+            chatHistory={chatHistory} setChatHistory={setChatHistory}
+            shownChatList={shownChatList} setShownChatList={setShownChatList}
+            isProcessing={isProcessing} setIsProcessing={setIsProcessing}
+            actionValue={actionValue} setActionValue={setActionValue}
+            getChatHistory={getChatHistory}
+            ref={sendRef}
+            setOpen={setOpen}
+          />
+        </motion.div>
       </div>
       <dialog id='transcriptionNotSupportedModal' className='modal'>
         <form method='dialog' className='modal-box'>
