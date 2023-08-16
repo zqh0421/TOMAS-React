@@ -41,6 +41,7 @@ const InputBox = (
     if (!props.disabled) {
       switch (e.code) {
         case "Enter":
+          e.preventDefault()
           props.onSend();
           break;
         default:

@@ -90,6 +90,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
   }, [shownChatList]);
 
   const dataUpdate = (res: AnswerResponse) => {
+    inputRef.current?.clearInput(); // Clear the input box
     props.setStage(res.type);
     if (res.component !== undefined) {
       props.setComponent(res.component)
@@ -143,6 +144,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
             answerForInput({ content: inputValue, component: props.component }).then(
               (res) => {
                 dataUpdate(res)
+                
               }
             );
           } else {
@@ -155,6 +157,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
             answerForSelect({ content: inputValue, component: props.component }).then(
               (res) => {
                 dataUpdate(res)
+  
               }
             );
           } else {
@@ -170,6 +173,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
               actionValue: actionValue,
             }).then((res) => {
               dataUpdate(res)
+
             });
           } else {
             setShownChatList([...shownChatList, errorMessage])
@@ -185,7 +189,6 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
         console.error(err);
       }
     }
-    inputRef.current?.clearInput(); // Clear the input box
   };
 
   const handleScrollToBottom = () => {

@@ -41,6 +41,7 @@ const MockWindow = (props: {
   const inputRef = useRef<InputRef>(null);
   const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
   const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
+  const tags = new Map<string, string>()
   const suffix = (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -59,6 +60,13 @@ const MockWindow = (props: {
         const elements = doc.querySelectorAll('*')
         elements.forEach((element, index) => {
           element.setAttribute('interactive_i', component.i)
+          if (element.tagName.toLowerCase() === 'a') {
+            element.setAttribute('target', '_blank')
+            element.setAttribute('rel', 'noopener noreferrer')
+          }
+          if (!element.hasChildNodes || Array.from(element.childNodes).every(node => node.nodeType === 3)) {
+            tags.set(component.i, element.textContent!=null ? element.textContent : "")
+          }
         })
         return doc.outerHTML
       })}`)
@@ -77,7 +85,11 @@ const MockWindow = (props: {
       console.log(props.component)
       setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`)
     } else {
-      setHtml(``)
+      setHtml(`
+        <h2 class="text-3xl leading-loose font-bold">
+          Please first tell me which website you want to learn more.
+        </h2>`
+      )
     }
   }, [stage, content])
 
@@ -122,7 +134,7 @@ const MockWindow = (props: {
     props.components?.forEach((component) => {
       if (component.i === iAttribute) {
         props.setIsProcessing(true)
-        answerForSelect({ content: component.description, component: component }).then(
+        answerForSelect({ content: tags.get(component.i) ?? component.description, component: component }).then(
           (res) => {
             props.dataUpdate(res)
             props.setIsProcessing(false)
@@ -198,7 +210,7 @@ const MockWindow = (props: {
         <div
           dangerouslySetInnerHTML={{
             __html:
-              urlValue ? stage ? `<h1 class="text-2xl leading-loose font-bold">- ${stage}</h1>` : `<h1>Empty</h1>` : `Please input the URL above.`
+              `<h1 class="text-2xl leading-loose font-bold">${stage ? `- ${stage}` : ''}</h1>`
           }}
           className='bg-base-200'
         />
@@ -261,6 +273,9 @@ const MockWindow = (props: {
               }}
               disabled={props.isProcessing}
             />
+          </div>
+          <div className="w-full flex items-center justify-center mt-4">
+            <span className={`loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block" : "hidden"}`}></span>
           </div>
         </div>
       </div>
