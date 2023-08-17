@@ -5,16 +5,17 @@ import MockWindow from "./components/MockWindow";
 import ChatBox from "./components/ChatBox";
 import { ChatItem } from "./components/ChatList";
 import { useState, useRef } from "react";
-import type { ActionComponent, AnswerResponse } from "./apis/chat";
+import type { ActionComponent, AnswerResponse, SelectableComponent } from "./apis/chat";
 import { getChat } from "./apis/chat";
 import { SendRef } from "./components/ChatBox";
 import { motion } from 'framer-motion';
 
+
+
 function App() {
   const [stage, setStage] = useState("");
   const [component, setComponent] = useState<ActionComponent | null>(null);
-  const [components, setComponents] = useState<ActionComponent[] | null>(null);
-  const [componentOrComponents, setComponentOrComponents] = useState<"component" | "components" | "error">("error");
+  const [components, setComponents] = useState<SelectableComponent[] | null>(null);
   const [curContent, setCurContent] = useState<string | undefined>("")
   const [inputValue, setInputValue] = useState("");
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
@@ -38,12 +39,9 @@ function App() {
     setStage(res.type);
     if (res.component !== undefined) {
       setComponent(res.component)
-      setComponentOrComponents("component")
     } else if (res.components != undefined) {
       setComponents(res.components)
-      setComponentOrComponents("components")
     } else {
-      setComponentOrComponents("error")
       console.error("No component(s) available!")
     }
     if (res.actionValue) setActionValue(res.actionValue);
@@ -60,7 +58,7 @@ function App() {
         isChatShown={isChatShown}
         setIsChatShown={setIsChatShown}
       />
-      <div className='flex flex-row mx-4 my-4 space-x-4 flex-grow overflow-auto'>
+      <div className={`flex flex-row mx-4 my-4 ${isChatShown ? 'space-x-4' : ''} flex-grow overflow-auto`}>
         <motion.div
           style={{
             width: isChatShown ? "fit-content" : '100%',
@@ -73,7 +71,6 @@ function App() {
             content={curContent}
             component={component} setComponent={setComponent}
             components={components} setComponents={setComponents}
-            componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
             isProcessing={isProcessing} setIsProcessing={setIsProcessing}
             inputValue={inputValue} setInputValue={setInputValue}
             dataUpdate={dataUpdate}
@@ -93,14 +90,13 @@ function App() {
             overflow: isChatShown ? "initial" : "hidden",
             flex: isChatShown ? "1" : "none"
           }}
-          className={`h-full`}
+          className={`h-full hidden lg:block`}
         >
           <ChatBox
             className={"flex-1 h-full"}
             stage={stage} setStage={setStage}
             component={component} setComponent={setComponent}
             components={components} setComponents={setComponents}
-            componentOrComponents={componentOrComponents} setComponentOrComponents={setComponentOrComponents}
             setCurContent={setCurContent}
             dataUpdate={dataUpdate}
             inputValue={inputValue} setInputValue={setInputValue}
@@ -126,7 +122,7 @@ function App() {
           </div>
         </form>
       </dialog>
-      <Footer className='flex-none' />
+      <Footer className='flex-none hidden lg:block' />
     </div>
   );
 }

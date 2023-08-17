@@ -7,7 +7,8 @@ import {
   answerForSelect,
   confirmAnswer,
   firstOrder,
-  AnswerResponse
+  AnswerResponse,
+  SelectableComponent
 } from "../apis/chat";
 
 export interface SendRef {
@@ -21,10 +22,8 @@ interface ChatBoxProps {
   setStage: React.Dispatch<React.SetStateAction<string>>;
   component: ActionComponent | null;
   setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
-  components: ActionComponent[] | null;
-  setComponents: React.Dispatch<React.SetStateAction<ActionComponent[] | null>>;
-  componentOrComponents: "component" | "components" | "error";
-  setComponentOrComponents: React.Dispatch<React.SetStateAction<"component" | "components" | "error">>;
+  components: SelectableComponent[] | null;
+  setComponents: React.Dispatch<React.SetStateAction<SelectableComponent[] | null>>;
   setCurContent: React.Dispatch<React.SetStateAction<string | undefined>>;
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
@@ -94,12 +93,9 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
     props.setStage(res.type);
     if (res.component !== undefined) {
       props.setComponent(res.component)
-      props.setComponentOrComponents("component")
     } else if (res.components != undefined) {
       props.setComponents(res.components)
-      props.setComponentOrComponents("components")
     } else {
-      props.setComponentOrComponents("error")
       console.error("No component(s) available!")
     }
     if (res.actionValue) setActionValue(res.actionValue);
@@ -153,18 +149,21 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
             throw new Error("Component is null");
           }
         } else if (props.stage === "questionForSelect") {
-          if (props.component) {
-            answerForSelect({ content: inputValue, component: props.component }).then(
-              (res) => {
-                dataUpdate(res)
+          setShownChatList([...shownChatList, errorMessage])
+          setIsProcessing(false)
+          throw new Error("Temporarily unavailable in chatbox");
+          // if (props.component) {
+          //   answerForSelect({ content: inputValue, component: props.component }).then(
+          //     (res) => {
+          //       dataUpdate(res)
   
-              }
-            );
-          } else {
-            setShownChatList([...shownChatList, errorMessage])
-            setIsProcessing(false)
-            throw new Error("Component is null");
-          }
+          //     }
+          //   );
+          // } else {
+          //   setShownChatList([...shownChatList, errorMessage])
+          //   setIsProcessing(false)
+          //   throw new Error("Component is null");
+          // }
         } else if (props.stage === "requestConfirmation") {
           if (props.component) {
             confirmAnswer({

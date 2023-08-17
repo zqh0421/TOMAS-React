@@ -19,16 +19,16 @@ const NavBar = (props: {
           </label>
           <ul tabIndex={0} className="menu menu-md dropdown-content mt-3 z-10 p-2 shadow bg-base-100 rounded-box min-w-min">
             <li></li>
-            <li className="form-control w-56 min-w-min">
+            <li className="form-control w-44 lg:w-56 min-w-min">
                 <label className="label cursor-pointer min-w-min w-full flex box-border justify-between" >
                   <span className="label-text">Debugging Mode</span> 
-                  <input type="checkbox" className="toggle toggle-md" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
+                  <input type="checkbox" className="hidden lg:block toggle toggle-md" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
                 </label>
             </li>
             <li><a>About</a></li>
           </ul>
         </div>
-        <div className="form-control min-w-min">
+        <div className="hidden lg:block form-control min-w-min">
           <label className="label cursor-pointer min-w-min w-full flex" >
             <span className="label-text text-neutral-50 pr-2">Debugging Mode</span> 
             <input type="checkbox" className="toggle toggle-primary toggle-md" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />

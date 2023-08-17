@@ -3,7 +3,7 @@ import type { InputRef } from "antd";
 import { Loading } from "./recordStatus";
 import { useState, useRef, useEffect } from "react";
 import { navigate } from "../apis/chat";
-import type { ActionComponent } from "../apis/chat";
+import type { ActionComponent, SelectableComponent } from "../apis/chat";
 import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
 import SendBtn from "./SendBtn";
@@ -20,10 +20,8 @@ const MockWindow = (props: {
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   component: ActionComponent | null;
   setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
-  components: ActionComponent[] | null;
-  setComponents: React.Dispatch<React.SetStateAction<ActionComponent[] | null>>;
-  componentOrComponents: "component" | "components" | "error";
-  setComponentOrComponents: React.Dispatch<React.SetStateAction<"component" | "components" | "error">>;
+  components: SelectableComponent[] | null;
+  setComponents: React.Dispatch<React.SetStateAction<SelectableComponent[] | null>>;
   isProcessing: boolean;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
   dataUpdate: Function;
@@ -51,25 +49,61 @@ const MockWindow = (props: {
       <path d='M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM281 385c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l71-71L136 280c-13.3 0-24-10.7-24-24s10.7-24 24-24l182.1 0-71-71c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L393 239c9.4 9.4 9.4 24.6 0 33.9L281 385z' />
     </svg>
   );
+  
+  interface TableData {
+    i: string,
+    html: string
+  }
+
+  const generateTable = (components: SelectableComponent[]) => {
+    let table: TableData[] = [];
+    components.forEach(component => {
+      const row = generateTableRow(component.data, component.i)
+      table = [...table, {
+        i: component.i,
+        html: row
+      }]
+    })
+    return table
+  }
+
+  const generateTableRow = (data: string | Record<string, string | string[]>, i: string) => {
+    let temp = `<tr interactive_i="${i}">`
+    if (typeof data === "string") {
+      temp += `<td interactive_i="${i}" class="border px-4 py-2">`;
+      temp += data;
+      temp += '</td>';
+    } else {
+      for (const key in data) {
+        console.log("key: " + key)
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          console.log(data, key)
+          const value = data[key];
+          temp += `<td interactive_i="${i}" class="border px-4 py-2" >${key}</td>`;
+          if (Array.isArray(value)) {
+            temp += `<td interactive_i="${i}" class="border px-4 py-2" >`;
+            temp += value.join(', ');
+            temp += '</td>';
+          } else {
+            temp += `<td interactive_i="${i}" >${value}</td>`;
+          }
+        }
+      }
+    }
+    temp += '</tr>'
+    return temp
+  }
 
   useEffect(() => {
     if (stage === "questionForSelect") {
-      setHtml(`${props.components!=null && props.components.map(component => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(component.html, 'text/html').querySelectorAll('body > *')[0]
-        const elements = doc.querySelectorAll('*')
-        elements.forEach((element, index) => {
-          element.setAttribute('interactive_i', component.i)
-          if (element.tagName.toLowerCase() === 'a') {
-            element.setAttribute('target', '_blank')
-            element.setAttribute('rel', 'noopener noreferrer')
-          }
-          if (!element.hasChildNodes || Array.from(element.childNodes).every(node => node.nodeType === 3)) {
-            tags.set(component.i, element.textContent!=null ? element.textContent : "")
-          }
-        })
-        return doc.outerHTML
-      })}`)
+      if (props.components) {
+        const tableData = generateTable(props.components)
+        setHtml(`
+          <table class="table-auto w-full text-lg" >
+            ${tableData.map(row => row.html)}
+          </table>`)
+      }
+      
     } else if (stage === "requestConfirmation") {
       setHtml(`
         <h2 class="text-3xl leading-loose font-bold">${content}</h2>
@@ -134,7 +168,7 @@ const MockWindow = (props: {
     props.components?.forEach((component) => {
       if (component.i === iAttribute) {
         props.setIsProcessing(true)
-        answerForSelect({ content: tags.get(component.i) ?? component.description, component: component }).then(
+        answerForSelect({ content: typeof component.data === "string" ? component.data : component.description, component: component }).then(
           (res) => {
             props.dataUpdate(res)
             props.setIsProcessing(false)
@@ -202,7 +236,7 @@ const MockWindow = (props: {
             { value: "https://www.cinemark.com" },
           ]}
           onChange={(value) => setUrlValue(value)}
-          style={{ width: "25vw" }}
+          style={{ width: `25vw` }}
           autoFocus
         />}
       </motion.div>

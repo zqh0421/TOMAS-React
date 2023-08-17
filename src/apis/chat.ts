@@ -50,10 +50,16 @@ export type ActionComponent = {
   html: string;
 };
 
+export type SelectableComponent = {
+  i: string;
+  description: string;
+  data: string | Record<string, string | string[]>;
+}
+
 export type AnswerResponse = {
   type: string;
   component?: ActionComponent;
-  components?: ActionComponent[];
+  components?: SelectableComponent[];
   actionValue?: string;
 }
 
@@ -95,7 +101,7 @@ export const answerForInput = async (request: {
 
 export const answerForSelect = async (request: {
   content: string;
-  component: ActionComponent;
+  component: SelectableComponent;
 }) => {
   console.log("Answer for select...");
   const response = await fetch(
