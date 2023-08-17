@@ -39,7 +39,6 @@ const MockWindow = (props: {
   const inputRef = useRef<InputRef>(null);
   const [confirmLoadingYes, setConfirmLoadingYes] = useState(false);
   const [confirmLoadingNo, setConfirmLoadingNo] = useState(false);
-  const tags = new Map<string, string>()
   const suffix = (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -68,9 +67,9 @@ const MockWindow = (props: {
   }
 
   const generateTableRow = (data: string | Record<string, string | string[]>, i: string) => {
-    let temp = `<tr interactive_i="${i}">`
+    let temp = `<tr interactive_i="${i}" class="cursor-pointer hover:bg-slate-500 hover:text-neutral-50 hover:font-bold">`
     if (typeof data === "string") {
-      temp += `<td interactive_i="${i}" class="border px-4 py-2">`;
+      temp += `<td interactive_i="${i}" class="border px-6 py-3">`;
       temp += data;
       temp += '</td>';
     } else {
@@ -79,9 +78,9 @@ const MockWindow = (props: {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
           console.log(data, key)
           const value = data[key];
-          temp += `<td interactive_i="${i}" class="border px-4 py-2" >${key}</td>`;
+          temp += `<td interactive_i="${i}" class="border px-6 py-3 font-bold" >${key}</td>`;
           if (Array.isArray(value)) {
-            temp += `<td interactive_i="${i}" class="border px-4 py-2" >`;
+            temp += `<td interactive_i="${i}" class="border px-6 py-3" >`;
             temp += value.join(', ');
             temp += '</td>';
           } else {
@@ -99,7 +98,8 @@ const MockWindow = (props: {
       if (props.components) {
         const tableData = generateTable(props.components)
         setHtml(`
-          <table class="table-auto w-full text-lg" >
+          <h2 class="text-3xl leading-loose font-bold">${content}</h2>
+          <table class="mt-3 table-auto w-full text-xl" >
             ${tableData.map(row => row.html)}
           </table>`)
       }
