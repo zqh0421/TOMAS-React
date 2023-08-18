@@ -267,7 +267,7 @@ const MockWindow = (props: MockWindowProps) => {
       </motion.div>
       <div className={`relative h-[calc(100%-1.75rem)] bg-base-200 py-4 px-8 ${props.isProcessing || isDisabled ? 'overflow-hidden' : 'overflow-y-auto'} `}>
         {/* LoadingCover */}
-        <div className={`z-40 transition-opacity bg-white w-full h-full absolute top-0 left-0 ${props.isProcessing || isDisabled ? "block opacity-50" : "hidden opacity-0"}`}>
+        <div className={`z-40 transition-opacity bg-base-200 w-full h-full absolute top-0 left-0 ${props.isProcessing || isDisabled ? "block opacity-60" : "hidden opacity-0"}`}>
         </div>
         <div className={`z-50 w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4 ${props.isProcessing || isDisabled ? "block" : "hidden"}`}>
             <span className={`transition-opacity loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block opacity-100" : "hidden opacity-0"}`}></span>
