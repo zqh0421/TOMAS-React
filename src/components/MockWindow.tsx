@@ -84,7 +84,7 @@ const MockWindow = (props: MockWindowProps) => {
   }
 
   const generateTableRow = (data: string | Record<string, string | string[]>, i: string) => {
-    let temp = `<tr interactive_i="${i}" class="cursor-pointer hover:bg-slate-500 hover:text-neutral-50 hover:font-bold">`
+    let temp = `<tr interactive_i="${i}" class="cursor-pointer hover:bg-slate-900 hover:text-neutral-50 hover:font-bold">`
     if (typeof data === "string") {
       temp += `<td interactive_i="${i}" class="border px-6 py-3">`;
       temp += data;
@@ -115,7 +115,7 @@ const MockWindow = (props: MockWindowProps) => {
         const tableData = generateTable(props.components)
         setHtml(`
           <h2 class="text-3xl leading-loose font-bold">${content}</h2>
-          <table class="mt-3 table-auto w-full text-sm" >
+          <table class="mt-3 table-auto w-full text-md" >
             ${tableData.map(row => {
               console.log(row.html)
               return row.html
@@ -123,7 +123,6 @@ const MockWindow = (props: MockWindowProps) => {
           </table>
         `)
       }
-      
     } else if (stage === "requestConfirmation") {
       setHtml(`
         <h2 class="text-3xl leading-loose font-bold">${content}</h2>
@@ -190,7 +189,7 @@ const MockWindow = (props: MockWindowProps) => {
         props.setIsProcessing(true)
         const elements = document.querySelectorAll(`[interactive_i="${component.i}"]`)
         elements.forEach((element) => {
-          element.classList.add('bg-slate-500')
+          element.classList.add('bg-slate-900')
           element.classList.add('text-neutral-50')
           element.classList.add('font-bold')
         })
