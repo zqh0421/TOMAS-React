@@ -60,7 +60,7 @@ const InputBox = (
           placeholder='Chat with TOMAS...'
           value={props.inputValue}
           onChange={(e) => onInputBoxChange(e)}
-          onKeyUp={(e) => handleKeyPress(e)}
+          onKeyDown={(e) => handleKeyPress(e)}
           disabled={props.disabled}
         />
         <RecordBtn

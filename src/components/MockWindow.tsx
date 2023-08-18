@@ -237,7 +237,7 @@ const MockWindow = (props: MockWindowProps) => {
           placeholder='Input URL here.'
           value={urlValue}
           onChange={(e) => setUrlValue(e.target.value)}
-          onKeyUp={(e) => handleKeyPress(e)}
+          onKeyDown={(e) => handleKeyPress(e)}
           style={{ width: "25vw" }}
           suffix={
             <button
@@ -326,7 +326,7 @@ const MockWindow = (props: MockWindowProps) => {
               placeholder='Chat with TOMAS...'
               value={props.inputValue}
               onChange={(e) => !props.isProcessing && props.setInputValue(e.target.value)}
-              onKeyUp={(e) => {
+              onKeyDown={(e) => {
                 if (props && props.handleKeyPress) {
                   props.handleKeyPress(e)
                 }
