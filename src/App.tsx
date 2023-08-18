@@ -54,6 +54,7 @@ function App() {
   return (
     <div className='flex flex-col h-screen max-h-[100vh]'>
       <NavBar
+        stage={stage}
         className='flex-none'
         isChatShown={isChatShown}
         setIsChatShown={setIsChatShown}

@@ -267,13 +267,14 @@ const MockWindow = (props: MockWindowProps) => {
         />}
       </motion.div>
       <div className={`relative h-[calc(100%-1.75rem)] bg-base-200 py-4 px-8 ${props.isProcessing || isDisabled ? 'overflow-hidden' : 'overflow-y-auto'} `}>
-        <div className={`z-40 transition-opacity bg-white w-full h-full absolute top-0 left-0 ${props.isProcessing ? "block opacity-50" : "hidden opacity-0"}`}>
+        {/* LoadingCover */}
+        <div className={`z-40 transition-opacity bg-white w-full h-full absolute top-0 left-0 ${props.isProcessing || isDisabled ? "block opacity-50" : "hidden opacity-0"}`}>
         </div>
         <div className={`z-50 w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4 ${props.isProcessing || isDisabled ? "block" : "hidden"}`}>
             <span className={`transition-opacity loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block opacity-100" : "hidden opacity-0"}`}></span>
         </div>
-        <h1 className={`text-2xl leading-loose font-bold ${props.isChatShown ? "block" : "hidden"}`}>{stage ? `- ${stage}` : ''}</h1>
-        <div className={`flex flex-col gap-6 mt-12`}>
+        {/* Display */}
+        <div className={`flex flex-col gap-6 py-12 items-center justify-center h-full`}>
           <div
             dangerouslySetInnerHTML={{
               __html:
@@ -282,7 +283,7 @@ const MockWindow = (props: MockWindowProps) => {
             className='bg-base-200 text-center'
             onClick={(e) => handleWindowClick(e)}
           />
-          <div className={`w-full flex justify-around mt-12 ${open==="confirm" ? "block" : "hidden"}`}>
+          <div className={`w-full flex justify-around ${open==="confirm" ? "block" : "hidden"}`}>
             <button
               onClick={() => handleConfirmation("YES")}
               className={`btn btn-outline btn-md text-xl btn-wide ${confirmLoadingNo ? "btn-disabled" : ""}`}

@@ -3,6 +3,7 @@ import { removeChat } from "../apis/chat";
 const NavBar = (props: {
     className: string,
     isChatShown: boolean,
+    stage: string,
     setIsChatShown: React.Dispatch<React.SetStateAction<boolean>>
   }) => {
 
@@ -30,8 +31,8 @@ const NavBar = (props: {
         </div>
         <div className="hidden lg:block form-control min-w-min">
           <label className="label cursor-pointer min-w-min w-full flex" >
-            <span className="label-text text-neutral-50 pr-2">Debugging Mode</span> 
-            <input type="checkbox" className="toggle toggle-primary toggle-md" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
+            <input type="checkbox" className="toggle toggle-primary toggle-md mr-2" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
+            <span className="label-text text-neutral-50">Debugging Mode {props.isChatShown && props.stage ? `- ${props.stage}` : ''}</span> 
           </label>
       </div>
       </div>
