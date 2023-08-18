@@ -69,13 +69,13 @@ const MockWindow = (props: MockWindowProps) => {
     
     if (typeof components[0].data !== "string") {
       // make head
-      let temp = `<tr class="font-bold">`
+      let temp = `<thead><tr class="font-bold">`
       temp += Object.keys(components[0].data).map(key => {
         return (
           `<th>${key}</th>`
         )
       }).join('')
-      temp += `</tr>`
+      temp += `</tr></thead><tbody>`
       table = [{
         "html": temp
       }, ...table]
@@ -120,7 +120,7 @@ const MockWindow = (props: MockWindowProps) => {
               console.log(row.html)
               return row.html
             }).join('')}
-          </table>
+          </tbody></table>
         `)
       }
     } else if (stage === "requestConfirmation") {
@@ -140,7 +140,7 @@ const MockWindow = (props: MockWindowProps) => {
       setOpen("input")
     } else {
       setHtml(`
-        <h2 class="text-3xl leading-loose font-bold">
+        <h2 class="text-3xl leading-loose font-bold mb-8">
           Please first tell me which website you want to learn more.
         </h2>`
       )
@@ -320,7 +320,7 @@ const MockWindow = (props: MockWindowProps) => {
             </div>
             <TextArea
               autoSize={true}
-              className='input w-[30vw] text-xl focus:outline-none'
+              className={`input ${props.isChatShown ? 'w-[35vw]' : 'w-[60vw]'} text-xl focus:outline-none mt-8`}
               style={{ padding: "16px 8px", minHeight: "60px", maxHeight: "300px", lineHeight: "28px" }}
               placeholder='Chat with TOMAS...'
               value={props.inputValue}
