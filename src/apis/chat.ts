@@ -53,7 +53,7 @@ export type ActionComponent = {
 export type SelectableComponent = {
   i: string;
   description: string;
-  actionType: ActionType;
+  actionType?: ActionType;
   data: string | Record<string, string | string[]>;
 }
 

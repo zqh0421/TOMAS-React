@@ -63,10 +63,10 @@ function App() {
           style={{
             width: isChatShown ? "fit-content" : '100%',
           }}
-          className={`flex-1 w-full h-full`}
+          className={`flex-1 h-full`}
         >
           <MockWindow
-            className='h-full'
+            className={`h-full ${isChatShown ? 'w-[calc(50vw-1rem)]' : 'w-full'}`}
             stage={stage} setStage={setStage}
             content={curContent}
             component={component} setComponent={setComponent}

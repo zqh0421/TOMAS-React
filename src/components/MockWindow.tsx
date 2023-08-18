@@ -8,6 +8,7 @@ import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
 import SendBtn from "./SendBtn";
 import { motion } from 'framer-motion';
+import sampleTable from '../assets/sampleTable.json'
 
 const { TextArea } = Input;
 
@@ -52,7 +53,7 @@ const MockWindow = (props: MockWindowProps) => {
   );
   
   interface TableData {
-    i: string,
+    i?: string,
     html: string
   }
 
@@ -65,6 +66,20 @@ const MockWindow = (props: MockWindowProps) => {
         html: row
       }]
     })
+    
+    if (typeof components[0].data !== "string") {
+      // make head
+      let temp = `<tr class="font-bold">`
+      temp += Object.keys(components[0].data).map(key => {
+        return (
+          `<th>${key}</th>`
+        )
+      })
+      temp += `</tr>`
+      table = [{
+        "html": temp
+      }, ...table]
+    }
     return table
   }
 
@@ -80,13 +95,12 @@ const MockWindow = (props: MockWindowProps) => {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
           console.log(data, key)
           const value = data[key];
-          temp += `<td interactive_i="${i}" class="border px-6 py-3 font-bold" >${key}</td>`;
           if (Array.isArray(value)) {
             temp += `<td interactive_i="${i}" class="border px-6 py-3" >`;
             temp += value.join(', ');
             temp += '</td>';
           } else {
-            temp += `<td interactive_i="${i}" >${value}</td>`;
+            temp += `<td interactive_i="${i}" class="border px-6 py-3" >${value}</td>`;
           }
         }
       }
@@ -101,9 +115,13 @@ const MockWindow = (props: MockWindowProps) => {
         const tableData = generateTable(props.components)
         setHtml(`
           <h2 class="text-3xl leading-loose font-bold">${content}</h2>
-          <table class="mt-3 table-auto w-full text-xl" >
-            ${tableData.map(row => row.html)}
-          </table>`)
+          <table class="mt-3 table-auto w-full text-sm" >
+            ${tableData.map(row => {
+              console.log(row.html)
+              return row.html
+            }).join('')}
+          </table>
+        `)
       }
       
     } else if (stage === "requestConfirmation") {
@@ -157,7 +175,6 @@ const MockWindow = (props: MockWindowProps) => {
         break;
       default:
         break;
-
     }
   };
 
