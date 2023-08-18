@@ -289,7 +289,7 @@ const MockWindow = (props: {
                       console.error("Sending ERROR!")
                     }
                   }}
-                  disabled={props.isProcessing && props.inputValue.trim().length <= 0}
+                  disabled={props.isProcessing || props.inputValue.trim().length <= 0}
                   className="btn-circle btn-ghost btn-lg"
                 />
             </div>

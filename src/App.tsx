@@ -23,7 +23,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
   const [open, setOpen] = useState<"confirm" | "input" | "">("");
-  const [isChatShown, setIsChatShown] = useState(false)
+  const [isChatShown, setIsChatShown] = useState(true)
   const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
