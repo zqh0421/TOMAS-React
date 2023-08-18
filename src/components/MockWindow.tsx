@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 
 const { TextArea } = Input;
 
-const MockWindow = (props: {
+interface MockWindowProps {
   className: string;
   content?: string;
   stage: string;
@@ -31,7 +31,9 @@ const MockWindow = (props: {
   open: "input" | "confirm" | "";
   setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
   isChatShown: boolean;
-}) => {
+}
+
+const MockWindow = (props: MockWindowProps) => {
   const [urlValue, setUrlValue] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [html, setHtml] = useState<string>("")
@@ -168,6 +170,13 @@ const MockWindow = (props: {
     props.components?.forEach((component) => {
       if (component.i === iAttribute) {
         props.setIsProcessing(true)
+        const elements = document.querySelectorAll(`[interactive_i="${component.i}"]`)
+
+        elements.forEach((element) => {
+          element.classList.add('bg-slate-500')
+          element.classList.add('text-neutral-50')
+          element.classList.add('font-bold')
+        })
         answerForSelect({ content: typeof component.data === "string" ? component.data : component.description, component: component }).then(
           (res) => {
             props.dataUpdate(res)
@@ -240,7 +249,12 @@ const MockWindow = (props: {
           autoFocus
         />}
       </motion.div>
-      <div className="h-[calc(100%-1.75rem)] bg-base-200 overflow-y-auto py-4 px-8">
+      <div className={`relative h-[calc(100%-1.75rem)] bg-base-200 py-4 px-8 ${props.isProcessing || isDisabled ? 'overflow-hidden' : 'overflow-y-auto'} `}>
+        <div className={`z-40 transition-opacity bg-white w-full h-full absolute top-0 left-0 ${props.isProcessing ? "block opacity-50" : "hidden opacity-0"}`}>
+        </div>
+        <div className={`z-50 w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4 ${props.isProcessing || isDisabled ? "block" : "hidden"}`}>
+            <span className={`transition-opacity loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block opacity-100" : "hidden opacity-0"}`}></span>
+        </div>
         <div
           dangerouslySetInnerHTML={{
             __html:
@@ -260,14 +274,14 @@ const MockWindow = (props: {
           <div className={`w-full flex justify-around my-4 ${open==="confirm" ? "block" : "hidden"}`}>
             <button
               onClick={() => handleConfirmation("YES")}
-              className={`btn btn-outline btn-md btn-wide ${confirmLoadingNo ? "btn-disabled" : ""}`}
+              className={`btn btn-outline btn-md text-xl btn-wide ${confirmLoadingNo ? "btn-disabled" : ""}`}
               disabled={confirmLoadingYes || confirmLoadingNo}
             >
               YES {confirmLoadingYes && <Loading />}
             </button>
             <button
               onClick={() => handleConfirmation("NO")}
-              className={`btn btn-outline btn-md btn-wide ${confirmLoadingYes ? "btn-disabled" : ""}`}
+              className={`btn btn-outline btn-md text-xl btn-wide ${confirmLoadingYes ? "btn-disabled" : ""}`}
               disabled={confirmLoadingYes || confirmLoadingNo}
             >
               NO {confirmLoadingNo && <Loading />}
@@ -307,9 +321,6 @@ const MockWindow = (props: {
               }}
               disabled={props.isProcessing}
             />
-          </div>
-          <div className="w-full flex items-center justify-center mt-4">
-            <span className={`loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block" : "hidden"}`}></span>
           </div>
         </div>
       </div>
