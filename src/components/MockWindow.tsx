@@ -74,7 +74,7 @@ const MockWindow = (props: MockWindowProps) => {
         return (
           `<th>${key}</th>`
         )
-      })
+      }).join('')
       temp += `</tr>`
       table = [{
         "html": temp
@@ -97,7 +97,7 @@ const MockWindow = (props: MockWindowProps) => {
           const value = data[key];
           if (Array.isArray(value)) {
             temp += `<td interactive_i="${i}" class="border px-6 py-3" >`;
-            temp += value.join(', ');
+            temp += value.join('; ');
             temp += '</td>';
           } else {
             temp += `<td interactive_i="${i}" class="border px-6 py-3" >${value}</td>`;
@@ -138,6 +138,7 @@ const MockWindow = (props: MockWindowProps) => {
     } else if (stage) {
       console.log(props.component)
       setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`)
+      setOpen("input")
     } else {
       setHtml(`
         <h2 class="text-3xl leading-loose font-bold">
