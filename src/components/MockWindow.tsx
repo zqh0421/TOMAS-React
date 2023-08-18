@@ -189,7 +189,6 @@ const MockWindow = (props: MockWindowProps) => {
       if (component.i === iAttribute) {
         props.setIsProcessing(true)
         const elements = document.querySelectorAll(`[interactive_i="${component.i}"]`)
-
         elements.forEach((element) => {
           element.classList.add('bg-slate-500')
           element.classList.add('text-neutral-50')
@@ -273,13 +272,7 @@ const MockWindow = (props: MockWindowProps) => {
         <div className={`z-50 w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4 ${props.isProcessing || isDisabled ? "block" : "hidden"}`}>
             <span className={`transition-opacity loading loading-lg loading-dots ${props.isProcessing || isDisabled ? "block opacity-100" : "hidden opacity-0"}`}></span>
         </div>
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              `<h1 class="text-2xl leading-loose font-bold">${stage ? `- ${stage}` : ''}</h1>`
-          }}
-          className='bg-base-200'
-        />
+        <h1 className={`text-2xl leading-loose font-bold ${props.isChatShown ? "block" : "hidden"}`}>{stage ? `- ${stage}` : ''}</h1>
         <div className={`flex flex-col gap-6 mt-12`}>
           <div
             dangerouslySetInnerHTML={{
@@ -289,7 +282,7 @@ const MockWindow = (props: MockWindowProps) => {
             className='bg-base-200 text-center'
             onClick={(e) => handleWindowClick(e)}
           />
-          <div className={`w-full flex justify-around my-4 ${open==="confirm" ? "block" : "hidden"}`}>
+          <div className={`w-full flex justify-around mt-12 ${open==="confirm" ? "block" : "hidden"}`}>
             <button
               onClick={() => handleConfirmation("YES")}
               className={`btn btn-outline btn-md text-xl btn-wide ${confirmLoadingNo ? "btn-disabled" : ""}`}
