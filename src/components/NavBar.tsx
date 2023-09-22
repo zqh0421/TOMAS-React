@@ -3,6 +3,8 @@ import { removeChat } from "../apis/chat";
 const NavBar = (props: {
     className: string,
     isChatShown: boolean,
+    isConfirmationEnabled: boolean,
+    setIsConfirmationEnabled: React.Dispatch<React.SetStateAction<boolean>>,
     stage: string,
     setIsChatShown: React.Dispatch<React.SetStateAction<boolean>>
   }) => {
@@ -20,20 +22,29 @@ const NavBar = (props: {
           </label>
           <ul tabIndex={0} className="menu menu-md dropdown-content mt-3 z-10 p-2 shadow bg-base-100 rounded-box min-w-min">
             <li></li>
-            <li className="form-control w-44 lg:w-56 min-w-min">
+            <li className="form-control w-44 lg:w-60 min-w-min">
                 <label className="label cursor-pointer min-w-min w-full flex box-border justify-between" >
                   <span className="label-text">Debugging Mode</span> 
                   <input type="checkbox" className="hidden lg:block toggle toggle-md" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
+                </label>
+                <label className="label cursor-pointer min-w-min w-full flex box-border justify-between" >
+                  <span className="label-text">Confirmation Enabled</span> 
+                  <input type="checkbox" className="hidden lg:block toggle toggle-md" checked={props.isConfirmationEnabled} onChange={() => props.setIsConfirmationEnabled(!props.isConfirmationEnabled)} />
                 </label>
             </li>
             <li><a>About</a></li>
           </ul>
         </div>
-        <div className="hidden lg:block form-control min-w-min">
-          <label className="label cursor-pointer min-w-min w-full flex" >
+        <div className="hidden lg:flex lg:flex-row lg:gap-4 form-control min-w-min">
+          <label className="label cursor-pointer min-w-min flex" >
             <input type="checkbox" className="toggle toggle-primary toggle-md mr-2" checked={props.isChatShown} onChange={() => props.setIsChatShown(!props.isChatShown)} />
-            <span className="label-text text-neutral-50">Debugging Mode {props.isChatShown && props.stage ? `- ${props.stage}` : ''}</span> 
+            <span className="label-text text-neutral-50">Debugging Mode</span> 
           </label>
+          <label className="label cursor-pointer min-w-min flex" >
+            <input type="checkbox" className="toggle toggle-secondary toggle-md mr-2" checked={props.isConfirmationEnabled} onChange={() => props.setIsConfirmationEnabled(!props.isConfirmationEnabled)} />
+            <span className="label-text text-neutral-50">Confirmation Enabled</span> 
+          </label>
+          <span className="label-text text-neutral-50">{props.isChatShown && props.stage ? `- ${props.stage}` : ''}</span> 
       </div>
       </div>
       <div className="navbar-center">

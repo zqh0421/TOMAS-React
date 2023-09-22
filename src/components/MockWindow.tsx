@@ -8,7 +8,6 @@ import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
 import SendBtn from "./SendBtn";
 import { motion } from 'framer-motion';
-import sampleTable from '../assets/sampleTable.json'
 
 const { TextArea } = Input;
 
@@ -32,6 +31,8 @@ interface MockWindowProps {
   open: "input" | "confirm" | "";
   setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
   isChatShown: boolean;
+  isConfirmationEnabled: boolean;
+  setIsConfirmationEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MockWindow = (props: MockWindowProps) => {
@@ -124,10 +125,15 @@ const MockWindow = (props: MockWindowProps) => {
         `)
       }
     } else if (stage === "requestConfirmation") {
-      setHtml(`
+      if (props.isConfirmationEnabled) {
+        setHtml(`
         <h2 class="text-3xl leading-loose font-bold">${content}</h2>
       `);
-      setOpen("confirm")
+        setOpen("confirm")
+      } else {
+        handleConfirmation("YES")
+      }
+    
     } else if (stage==="questionForInput") {
       setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`)
       setOpen("input")
@@ -150,7 +156,9 @@ const MockWindow = (props: MockWindowProps) => {
   const handleConfirmation = (response: string) => {
     props.setIsProcessing(true)
     if (response === "YES") {
-      setConfirmLoadingYes(true)
+      // if (props.isConfirmationEnabled) {
+        setConfirmLoadingYes(true)
+      // }
     } else {
       setConfirmLoadingNo(true)
     }

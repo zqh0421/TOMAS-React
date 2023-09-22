@@ -147,8 +147,8 @@ export const confirmAnswer = async (request: {
 
 export const removeChat = async () => {
   console.log("Remove the chat...");
-  const response = fetch("http://localhost:8000/api/chats", {
+  const response = await fetch("http://localhost:8000/api/chats", {
     method: "DELETE",
   });
-  return (await response).json();
+  return response.json();
 };

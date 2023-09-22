@@ -24,6 +24,7 @@ function App() {
   const [actionValue, setActionValue] = useState<string>("");
   const [open, setOpen] = useState<"confirm" | "input" | "">("");
   const [isChatShown, setIsChatShown] = useState(true)
+  const [isConfirmationEnabled, setIsConfirmationEnabled] = useState(true)
   const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
@@ -58,6 +59,8 @@ function App() {
         className='flex-none'
         isChatShown={isChatShown}
         setIsChatShown={setIsChatShown}
+        isConfirmationEnabled={isConfirmationEnabled}
+        setIsConfirmationEnabled={setIsConfirmationEnabled}
       />
       <div className={`flex flex-row mx-4 my-4 ${isChatShown ? 'space-x-4' : ''} flex-grow overflow-auto`}>
         <motion.div
@@ -81,6 +84,8 @@ function App() {
             open={open}
             setOpen={setOpen}
             isChatShown={isChatShown}
+            isConfirmationEnabled={isConfirmationEnabled}
+            setIsConfirmationEnabled={setIsConfirmationEnabled}
           />
         </motion.div>
         <motion.div
