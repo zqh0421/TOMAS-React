@@ -172,7 +172,6 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
               actionValue: actionValue,
             }).then((res) => {
               dataUpdate(res)
-
             });
           } else {
             setShownChatList([...shownChatList, errorMessage])
