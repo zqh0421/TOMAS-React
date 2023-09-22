@@ -55,14 +55,14 @@ export type SelectableComponent = {
   description: string;
   actionType?: ActionType;
   data: string | Record<string, string | string[]>;
-}
+};
 
 export type AnswerResponse = {
   type: string;
   component?: ActionComponent;
   components?: SelectableComponent[];
   actionValue?: string;
-}
+};
 
 export const firstOrder = async (request: { content: string }) => {
   console.log("First order...");
@@ -105,6 +105,11 @@ export const answerForSelect = async (request: {
   component: SelectableComponent;
 }) => {
   console.log("Answer for select...");
+  const actionType = request.component.actionType;
+  const componentWithFocus = {
+    ...request.component,
+    actionType: actionType === "select" ? "focus" : actionType,
+  };
   const response = await fetch(
     "http://localhost:8000/api/chats/answer/select",
     {
@@ -114,7 +119,7 @@ export const answerForSelect = async (request: {
       },
       body: JSON.stringify({
         content: request.content,
-        component: request.component,
+        component: componentWithFocus,
       }),
     }
   );
