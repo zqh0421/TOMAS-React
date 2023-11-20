@@ -36,6 +36,7 @@ interface MockWindowProps {
   isChatShown: boolean;
   isConfirmationEnabled: boolean;
   setIsConfirmationEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  screenDescription: string;
 }
 
 const MockWindow = (props: MockWindowProps) => {
@@ -123,11 +124,11 @@ const MockWindow = (props: MockWindowProps) => {
   };
 
   // Automate click on YES button
-  useEffect(() => {
-    if (open === "confirm") {
-      document.getElementById("yesButton")?.click();
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (open === "confirm") {
+  //     document.getElementById("yesButton")?.click();
+  //   }
+  // }, [open]);
 
   useEffect(() => {
     if (stage === "questionForSelect") {
@@ -291,8 +292,15 @@ const MockWindow = (props: MockWindowProps) => {
             placeholder='Input URL here.'
             value={urlValue}
             options={[
+              {
+                value: "https://m.megabox.co.kr/",
+              },
               { value: "https://www.greyhound.com" },
               { value: "https://www.cinemark.com" },
+              {
+                value:
+                  "https://m.bustago.or.kr:444/mobus/btmho/BTMHORN0001.do#",
+              },
             ]}
             onChange={(value) => setUrlValue(value)}
             style={{ width: `25vw` }}
@@ -332,6 +340,12 @@ const MockWindow = (props: MockWindowProps) => {
         <div
           className={`flex flex-col gap-6 py-12 items-center justify-center h-full`}
         >
+          <h2 className='text-3xl leading-loose font-bold'>
+            {props.screenDescription}
+          </h2>
+          <h2 className='text-3xl leading-loose font-bold'>
+            {props.component?.description}
+          </h2>
           <div
             dangerouslySetInnerHTML={{
               __html: html ? html : ``,

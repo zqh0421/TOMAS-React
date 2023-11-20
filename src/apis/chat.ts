@@ -48,6 +48,7 @@ export type ActionComponent = {
   actionType: ActionType;
   description: string;
   html: string;
+  question?: string;
 };
 
 export type SelectableComponent = {
@@ -55,14 +56,15 @@ export type SelectableComponent = {
   description: string;
   actionType?: ActionType;
   data: string | Record<string, string | string[]>;
-}
+};
 
 export type AnswerResponse = {
   type: string;
   component?: ActionComponent;
   components?: SelectableComponent[];
   actionValue?: string;
-}
+  screenDescription?: string;
+};
 
 export const firstOrder = async (request: { content: string }) => {
   console.log("First order...");

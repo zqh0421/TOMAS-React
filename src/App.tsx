@@ -5,26 +5,31 @@ import MockWindow from "./components/MockWindow";
 import ChatBox from "./components/ChatBox";
 import { ChatItem } from "./components/ChatList";
 import { useState, useRef } from "react";
-import type { ActionComponent, AnswerResponse, SelectableComponent } from "./apis/chat";
+import type {
+  ActionComponent,
+  AnswerResponse,
+  SelectableComponent,
+} from "./apis/chat";
 import { getChat } from "./apis/chat";
 import { SendRef } from "./components/ChatBox";
-import { motion } from 'framer-motion';
-
-
+import { motion } from "framer-motion";
 
 function App() {
   const [stage, setStage] = useState("");
   const [component, setComponent] = useState<ActionComponent | null>(null);
-  const [components, setComponents] = useState<SelectableComponent[] | null>(null);
-  const [curContent, setCurContent] = useState<string | undefined>("")
+  const [components, setComponents] = useState<SelectableComponent[] | null>(
+    null
+  );
+  const [screenDescription, setScreenDescription] = useState("");
+  const [curContent, setCurContent] = useState<string | undefined>("");
   const [inputValue, setInputValue] = useState("");
   const [chatHistory, setChatHistory] = useState<Array<ChatItem>>([]); // real data from database
   const [shownChatList, setShownChatList] = useState<Array<ChatItem>>([]); // shown data in the chatbox
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [actionValue, setActionValue] = useState<string>("");
   const [open, setOpen] = useState<"confirm" | "input" | "">("");
-  const [isChatShown, setIsChatShown] = useState(true)
-  const [isConfirmationEnabled, setIsConfirmationEnabled] = useState(true)
+  const [isChatShown, setIsChatShown] = useState(true);
+  const [isConfirmationEnabled, setIsConfirmationEnabled] = useState(true);
   const sendRef = useRef<SendRef>(null);
 
   const getChatHistory = async () => {
@@ -38,19 +43,20 @@ function App() {
 
   const dataUpdate = (res: AnswerResponse) => {
     setStage(res.type);
+    setScreenDescription(res.screenDescription || "");
     if (res.component !== undefined) {
-      setComponent(res.component)
+      setComponent(res.component);
     } else if (res.components != undefined) {
-      setComponents(res.components)
+      setComponents(res.components);
     } else {
-      console.error("No component(s) available!")
+      console.error("No component(s) available!");
     }
     if (res.actionValue) setActionValue(res.actionValue);
     (async () => {
       setChatHistory(await getChatHistory());
       setIsProcessing(false);
     })();
-  }
+  };
 
   return (
     <div className='flex flex-col h-screen max-h-[100vh]'>
@@ -62,21 +68,32 @@ function App() {
         isConfirmationEnabled={isConfirmationEnabled}
         setIsConfirmationEnabled={setIsConfirmationEnabled}
       />
-      <div className={`flex flex-row mx-4 my-4 ${isChatShown ? 'space-x-4' : ''} flex-grow overflow-auto`}>
+      <div
+        className={`flex flex-row mx-4 my-4 ${
+          isChatShown ? "space-x-4" : ""
+        } flex-grow overflow-auto`}
+      >
         <motion.div
           style={{
-            width: isChatShown ? "fit-content" : '100%',
+            width: isChatShown ? "fit-content" : "100%",
           }}
           className={`flex-1 h-full`}
         >
           <MockWindow
-            className={`h-full ${isChatShown ? 'w-[calc(50vw-1rem)]' : 'w-full'}`}
-            stage={stage} setStage={setStage}
+            className={`h-full ${
+              isChatShown ? "w-[calc(50vw-1rem)]" : "w-full"
+            }`}
+            stage={stage}
+            setStage={setStage}
             content={curContent}
-            component={component} setComponent={setComponent}
-            components={components} setComponents={setComponents}
-            isProcessing={isProcessing} setIsProcessing={setIsProcessing}
-            inputValue={inputValue} setInputValue={setInputValue}
+            component={component}
+            setComponent={setComponent}
+            components={components}
+            setComponents={setComponents}
+            isProcessing={isProcessing}
+            setIsProcessing={setIsProcessing}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
             dataUpdate={dataUpdate}
             actionValue={actionValue}
             onSend={sendRef.current?.handleSend}
@@ -86,6 +103,7 @@ function App() {
             isChatShown={isChatShown}
             isConfirmationEnabled={isConfirmationEnabled}
             setIsConfirmationEnabled={setIsConfirmationEnabled}
+            screenDescription={screenDescription}
           />
         </motion.div>
         <motion.div
@@ -94,25 +112,34 @@ function App() {
             width: isChatShown ? "fit-content" : 0,
             visibility: isChatShown ? "initial" : "hidden",
             overflow: isChatShown ? "initial" : "hidden",
-            flex: isChatShown ? "1" : "none"
+            flex: isChatShown ? "1" : "none",
           }}
           className={`h-full hidden lg:block`}
         >
           <ChatBox
             className={"flex-1 h-full"}
-            stage={stage} setStage={setStage}
-            component={component} setComponent={setComponent}
-            components={components} setComponents={setComponents}
+            stage={stage}
+            setStage={setStage}
+            component={component}
+            setComponent={setComponent}
+            components={components}
+            setComponents={setComponents}
             setCurContent={setCurContent}
             dataUpdate={dataUpdate}
-            inputValue={inputValue} setInputValue={setInputValue}
-            chatHistory={chatHistory} setChatHistory={setChatHistory}
-            shownChatList={shownChatList} setShownChatList={setShownChatList}
-            isProcessing={isProcessing} setIsProcessing={setIsProcessing}
-            actionValue={actionValue} setActionValue={setActionValue}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            shownChatList={shownChatList}
+            setShownChatList={setShownChatList}
+            isProcessing={isProcessing}
+            setIsProcessing={setIsProcessing}
+            actionValue={actionValue}
+            setActionValue={setActionValue}
             getChatHistory={getChatHistory}
             ref={sendRef}
             setOpen={setOpen}
+            setScreenDescription={setScreenDescription}
           />
         </motion.div>
       </div>
