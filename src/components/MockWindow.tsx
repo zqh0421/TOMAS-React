@@ -135,7 +135,7 @@ const MockWindow = (props: MockWindowProps) => {
       if (props.components) {
         const tableData = generateTable(props.components);
         setHtml(`
-          <h2 class="text-3xl leading-loose font-bold">${content}</h2>
+          <h2 class="text-2xl leading-loose font-bold">${content}</h2>
           <table class="mt-3 table-auto w-full text-md" >
             ${tableData
               .map((row) => {
@@ -149,26 +149,26 @@ const MockWindow = (props: MockWindowProps) => {
     } else if (stage === "requestConfirmation") {
       if (props.isConfirmationEnabled) {
         setHtml(`
-        <h2 class="text-3xl leading-loose font-bold">${content}</h2>
+        <h2 class="text-2xl leading-loose font-bold">${content}</h2>
       `);
         setOpen("confirm");
       } else {
         handleConfirmation("YES");
       }
     } else if (stage === "questionForInput") {
-      setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`);
+      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
       setOpen("input");
     } else if (stage === "navigate") {
-      setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`);
+      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
       setOpen("input");
     } else if (stage) {
       console.log(props.component);
-      setHtml(`<h2 class="text-3xl leading-loose font-bold">${content}</h2>`);
+      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
       setOpen("input");
     } else {
       setHtml(`
-        <h2 class="text-3xl leading-loose font-bold mb-8">
-          Please first tell me which website you want to learn more.
+        <h2 class="text-2xl leading-loose font-bold mb-8">
+          원하는 웹사이트를 위에 입력하세요.
         </h2>`);
     }
   }, [stage, content]);
@@ -340,10 +340,10 @@ const MockWindow = (props: MockWindowProps) => {
         <div
           className={`flex flex-col gap-6 py-12 items-center justify-center h-full`}
         >
-          <h2 className='text-3xl leading-loose font-bold'>
+          <h2 className='text-2xl leading-loose font-bold'>
             {props.screenDescription}
           </h2>
-          <h2 className='text-3xl leading-loose font-bold'>
+          <h2 className='text-2xl leading-loose font-bold'>
             {props.component?.description}
           </h2>
           <div
