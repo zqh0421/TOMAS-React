@@ -46,8 +46,9 @@ function App() {
     setScreenDescription(res.screenDescription || "");
     if (res.component !== undefined) {
       setComponent(res.component);
-    } else if (res.components != undefined) {
-      setComponents(res.components);
+      if (res.components != undefined) {
+        setComponents(res.components);
+      }
     } else {
       console.error("No component(s) available!");
     }

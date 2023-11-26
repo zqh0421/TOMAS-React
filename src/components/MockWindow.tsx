@@ -8,7 +8,6 @@ import { answerForSelect, confirmAnswer } from "../apis/chat";
 import RecordBtn from "./RecordBtn";
 import SendBtn from "./SendBtn";
 import { motion } from "framer-motion";
-import sampleTable from "../assets/sampleTable.json";
 
 const { TextArea } = Input;
 
@@ -64,6 +63,7 @@ const MockWindow = (props: MockWindowProps) => {
 
   const generateTable = (components: SelectableComponent[]) => {
     let table: TableData[] = [];
+
     components.forEach((component) => {
       const row = generateTableRow(component.data, component.i);
       table = [
@@ -91,6 +91,14 @@ const MockWindow = (props: MockWindowProps) => {
         ...table,
       ];
     }
+    table.push({
+      i: "no",
+      html: `<tr interactive_i="no" class="cursor-pointer hover:bg-slate-900 hover:text-neutral-50 hover:font-bold">
+      <td interactive_i="no" class="border px-6 py-3" colspan="${
+        Object.keys(components[0].data).length
+      }">선택안함</td>
+      </tr>`,
+    });
     return table;
   };
 
@@ -131,12 +139,12 @@ const MockWindow = (props: MockWindowProps) => {
   // }, [open]);
 
   useEffect(() => {
+    setHtml("");
     if (stage === "questionForSelect") {
       if (props.components) {
         const tableData = generateTable(props.components);
         setHtml(`
-          <h2 class="text-2xl leading-loose font-bold">${content}</h2>
-          <table class="mt-3 table-auto w-full text-md" >
+          <table class="table-auto w-full text-md" >
             ${tableData
               .map((row) => {
                 console.log(row.html);
@@ -148,30 +156,19 @@ const MockWindow = (props: MockWindowProps) => {
       }
     } else if (stage === "requestConfirmation") {
       if (props.isConfirmationEnabled) {
-        setHtml(`
-        <h2 class="text-2xl leading-loose font-bold">${content}</h2>
-      `);
         setOpen("confirm");
       } else {
         handleConfirmation("YES");
       }
     } else if (stage === "questionForInput") {
-      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
       setOpen("input");
     } else if (stage === "navigate") {
-      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
       setOpen("input");
-    } else if (stage) {
-      console.log(props.component);
-      setHtml(`<h2 class="text-2xl leading-loose font-bold">${content}</h2>`);
-      setOpen("input");
-    } else {
-      setHtml(`
-        <h2 class="text-2xl leading-loose font-bold mb-8">
-          원하는 웹사이트를 위에 입력하세요.
-        </h2>`);
+    } else if (stage === "") {
+      setOpen("");
     }
-  }, [stage, content]);
+    console.log(stage);
+  }, [stage, content, props.components?.length]);
 
   const handleConfirmation = (response: string) => {
     props.setIsProcessing(true);
@@ -210,7 +207,25 @@ const MockWindow = (props: MockWindowProps) => {
     if (props.stage !== "questionForSelect") return;
     console.log(e.target);
     const iAttribute = (e.target as HTMLElement).getAttribute("interactive_i");
-    console.log(iAttribute);
+    if (iAttribute === "no") {
+      props.setIsProcessing(true);
+      const elements = document.querySelectorAll(`[interactive_i="no"]`);
+      elements.forEach((element) => {
+        element.classList.add("bg-slate-900");
+        element.classList.add("text-neutral-50");
+        element.classList.add("font-bold");
+      });
+      answerForSelect({
+        content: "선택 안함",
+        option: null,
+        component: props.component,
+      }).then((res) => {
+        props.dataUpdate(res);
+        props.setIsProcessing(false);
+      });
+      return;
+    }
+
     props.components?.forEach((component) => {
       if (component.i === iAttribute) {
         props.setIsProcessing(true);
@@ -226,11 +241,16 @@ const MockWindow = (props: MockWindowProps) => {
           content:
             typeof component.data === "string"
               ? component.data
-              : component.description,
-          component: component,
-        }).then((res) => {
+              : component.content,
+          option: component,
+          component: props.component,
+        }).then(async (res) => {
           props.dataUpdate(res);
           props.setIsProcessing(false);
+          if (res.component && res.component.actionType === "pass") {
+            await new Promise((r) => setTimeout(r, 300));
+            document.getElementById("yesButton")?.click();
+          }
         });
         return;
       }
@@ -309,7 +329,7 @@ const MockWindow = (props: MockWindowProps) => {
         )}
       </motion.div>
       <div
-        className={`relative h-[calc(100%-1.75rem)] bg-base-200 py-4 px-8 ${
+        className={`relative h-full bg-base-200 py-4 px-8 ${
           props.isProcessing || isDisabled
             ? "overflow-hidden"
             : "overflow-y-auto"
@@ -338,7 +358,7 @@ const MockWindow = (props: MockWindowProps) => {
         </div>
         {/* Display */}
         <div
-          className={`flex flex-col gap-6 py-12 items-center justify-center h-full`}
+          className={`flex flex-col gap-3 py-3 items-center justify-center h-full`}
         >
           <h2 className='text-2xl leading-loose font-bold'>
             {props.screenDescription}
@@ -346,69 +366,87 @@ const MockWindow = (props: MockWindowProps) => {
           <h2 className='text-2xl leading-loose font-bold'>
             {props.component?.description}
           </h2>
+          <h2 className='text-2xl leading-loose font-bold'>
+            {props.component ? props.component.question : content}
+          </h2>
+          {stage === "questionForSelect" && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: html ? html : ``,
+              }}
+              className='bg-base-200 text-center w-full overflow-auto'
+              onClick={(e) => handleWindowClick(e)}
+            />
+          )}
+
+          {stage === "" && (
+            <h2 className='text-2xl leading-loose font-bold'>
+              위에서 웹사이트를 선택하세요.
+            </h2>
+          )}
+
           <div
-            dangerouslySetInnerHTML={{
-              __html: html ? html : ``,
-            }}
-            className='bg-base-200 text-center'
-            onClick={(e) => handleWindowClick(e)}
-          />
-          <div
-            className={`w-full flex justify-around ${
+            className={`w-60 flex gap-4 ${
               open === "confirm" ? "block" : "hidden"
             }`}
           >
             <button
               onClick={() => handleConfirmation("YES")}
-              className={`btn btn-outline btn-md text-xl btn-wide ${
+              className={`btn btn-outline btn-md text-xl btn-wide flex-1 ${
                 confirmLoadingNo ? "btn-disabled" : ""
               }`}
               disabled={confirmLoadingYes || confirmLoadingNo}
               id='yesButton'
             >
-              YES {confirmLoadingYes && <Loading />}
+              네 {confirmLoadingYes && <Loading />}
             </button>
             <button
               onClick={() => handleConfirmation("NO")}
-              className={`btn btn-outline btn-md text-xl btn-wide ${
+              className={`btn btn-outline btn-md text-xl btn-wide flex-1 ${
                 confirmLoadingYes ? "btn-disabled" : ""
               }`}
               disabled={confirmLoadingYes || confirmLoadingNo}
             >
-              NO {confirmLoadingNo && <Loading />}
+              아니오 {confirmLoadingNo && <Loading />}
             </button>
           </div>
           <div
-            className={`w-full flex flex-col justify-around items-center gap-6 my-4 ${
-              open === "input" ? "block" : "hidden"
+            className={`w-full flex justify-around items-center gap-3 mb-4 ${
+              open === "input"
+                ? "flex-col"
+                : open === "confirm"
+                ? "flex-row"
+                : "hidden"
             }`}
           >
-            <div className='grid grid-cols-2 gap-20'>
-              <RecordBtn
-                inputValue={props.inputValue}
-                setInputValue={props.setInputValue}
-                disabled={props.isProcessing}
-                className='btn-circle btn-ghost btn-lg'
-              />
-              <SendBtn
-                onSend={async () => {
-                  if (props.onSend) {
-                    await props.onSend();
-                  } else {
-                    console.error("Sending ERROR!");
+            {open === "input" && (
+              <div className='flex gap-20'>
+                <RecordBtn
+                  inputValue={props.inputValue}
+                  setInputValue={props.setInputValue}
+                  disabled={props.isProcessing}
+                  className='btn-circle btn-ghost btn-lg'
+                />
+                <SendBtn
+                  onSend={async () => {
+                    if (props.onSend) {
+                      await props.onSend();
+                    } else {
+                      console.error("Sending ERROR!");
+                    }
+                  }}
+                  disabled={
+                    props.isProcessing || props.inputValue.trim().length <= 0
                   }
-                }}
-                disabled={
-                  props.isProcessing || props.inputValue.trim().length <= 0
-                }
-                className='btn-circle btn-ghost btn-lg'
-              />
-            </div>
+                  className='btn-circle btn-ghost btn-lg'
+                />
+              </div>
+            )}
             <TextArea
               autoSize={true}
               className={`input ${
                 props.isChatShown ? "w-[35vw]" : "w-[60vw]"
-              } text-xl focus:outline-none mt-8`}
+              } text-xl focus:outline-none mt-2`}
               style={{
                 padding: "16px 8px",
                 minHeight: "60px",
@@ -427,6 +465,29 @@ const MockWindow = (props: MockWindowProps) => {
               }}
               disabled={props.isProcessing}
             />
+            {open !== "input" && (
+              <div className='flex gap-3'>
+                <RecordBtn
+                  inputValue={props.inputValue}
+                  setInputValue={props.setInputValue}
+                  disabled={props.isProcessing}
+                  className='btn-circle btn-ghost btn-md'
+                />
+                <SendBtn
+                  onSend={async () => {
+                    if (props.onSend) {
+                      await props.onSend();
+                    } else {
+                      console.error("Sending ERROR!");
+                    }
+                  }}
+                  disabled={
+                    props.isProcessing || props.inputValue.trim().length <= 0
+                  }
+                  className='btn-circle btn-ghost btn-md'
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

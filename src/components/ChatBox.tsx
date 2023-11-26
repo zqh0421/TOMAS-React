@@ -9,6 +9,7 @@ import {
   firstOrder,
   AnswerResponse,
   SelectableComponent,
+  answerForFilter,
 } from "../apis/chat";
 
 export interface SendRef {
@@ -162,14 +163,21 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
             throw new Error("Component is null");
           }
         } else if (props.stage === "questionForSelect") {
-          setShownChatList([...shownChatList, errorMessage]);
-          setIsProcessing(false);
-          throw new Error("Temporarily unavailable in chatbox");
+          if (props.components) {
+            answerForFilter({
+              content: inputValue,
+              components: props.components,
+            }).then((res) => {
+              dataUpdate(res);
+            });
+          }
+          // setShownChatList([...shownChatList, errorMessage]);
+          // setIsProcessing(false);
+          // throw new Error("Temporarily unavailable in chatbox");
           // if (props.component) {
           //   answerForSelect({ content: inputValue, component: props.component }).then(
           //     (res) => {
           //       dataUpdate(res)
-
           //     }
           //   );
           // } else {
