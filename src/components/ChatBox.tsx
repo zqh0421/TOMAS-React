@@ -168,7 +168,11 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
               content: inputValue,
               components: props.components,
             }).then((res) => {
-              dataUpdate(res);
+              if (res.components && res.components.length !== 0) {
+                dataUpdate(res);
+              } else {
+                setIsProcessing(false);
+              }
             });
           }
           // setShownChatList([...shownChatList, errorMessage]);

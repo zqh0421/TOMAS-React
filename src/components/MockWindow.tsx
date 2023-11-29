@@ -168,7 +168,7 @@ const MockWindow = (props: MockWindowProps) => {
       setOpen("");
     }
     console.log(stage);
-  }, [stage, content, props.components?.length]);
+  }, [stage, content, props.component?.description]);
 
   const handleConfirmation = (response: string) => {
     props.setIsProcessing(true);
@@ -412,11 +412,7 @@ const MockWindow = (props: MockWindowProps) => {
           </div>
           <div
             className={`w-full flex justify-around items-center gap-3 mb-4 ${
-              open === "input"
-                ? "flex-col"
-                : open === "confirm"
-                ? "flex-row"
-                : "hidden"
+              open === "input" ? "flex-col" : "flex-row"
             }`}
           >
             {open === "input" && (
