@@ -8,12 +8,13 @@ import {
   confirmAnswer,
   firstOrder,
   AnswerResponse,
-  SelectableComponent
+  SelectableComponent,
+  answerForFilter,
 } from "../apis/chat";
 
 export interface SendRef {
-  handleSend: () => void,
-  handleKeyPress: (e: React.KeyboardEvent) => void
+  handleSend: () => void;
+  handleKeyPress: (e: React.KeyboardEvent) => void;
 }
 
 interface ChatBoxProps {
@@ -23,25 +24,38 @@ interface ChatBoxProps {
   component: ActionComponent | null;
   setComponent: React.Dispatch<React.SetStateAction<ActionComponent | null>>;
   components: SelectableComponent[] | null;
-  setComponents: React.Dispatch<React.SetStateAction<SelectableComponent[] | null>>;
+  setComponents: React.Dispatch<
+    React.SetStateAction<SelectableComponent[] | null>
+  >;
   setCurContent: React.Dispatch<React.SetStateAction<string | undefined>>;
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   dataUpdate: Function;
   chatHistory: Array<ChatItem>;
-  setChatHistory:  React.Dispatch<React.SetStateAction<Array<ChatItem>>>;
+  setChatHistory: React.Dispatch<React.SetStateAction<Array<ChatItem>>>;
   shownChatList: Array<ChatItem>;
-  setShownChatList:  React.Dispatch<React.SetStateAction<Array<ChatItem>>>;
+  setShownChatList: React.Dispatch<React.SetStateAction<Array<ChatItem>>>;
   isProcessing: boolean;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
   actionValue: string;
   setActionValue: React.Dispatch<React.SetStateAction<string>>;
   getChatHistory: Function;
   setOpen: React.Dispatch<React.SetStateAction<"input" | "confirm" | "">>;
+  setScreenDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
-  const { chatHistory, setChatHistory, shownChatList, setShownChatList, isProcessing, setIsProcessing, actionValue, setActionValue, getChatHistory } = props
+  const {
+    chatHistory,
+    setChatHistory,
+    shownChatList,
+    setShownChatList,
+    isProcessing,
+    setIsProcessing,
+    actionValue,
+    setActionValue,
+    getChatHistory,
+  } = props;
   const inputRef = useRef<InputBoxRef>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -56,8 +70,7 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
   const errorMessage = {
     id: Math.floor(Math.random() * 1000).toString(),
     role: "AI",
-    content:
-      "There is some error here...",
+    content: "There is some error here...",
   };
 
   useEffect(() => {
@@ -69,7 +82,8 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
 
   useEffect(() => {
     setShownChatList(chatHistory);
-    if (chatHistory.length) props.setCurContent(chatHistory[chatHistory.length-1].content)
+    if (chatHistory.length)
+      props.setCurContent(chatHistory[chatHistory.length - 1].content);
   }, [chatHistory]);
 
   useEffect(() => {
@@ -91,29 +105,29 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
   const dataUpdate = (res: AnswerResponse) => {
     inputRef.current?.clearInput(); // Clear the input box
     props.setStage(res.type);
+    props.setScreenDescription(res.screenDescription || "");
     if (res.component !== undefined) {
-      props.setComponent(res.component)
+      props.setComponent(res.component);
     } else if (res.components != undefined) {
-      props.setComponents(res.components)
+      props.setComponents(res.components);
     } else {
-      console.error("No component(s) available!")
+      console.error("No component(s) available!");
     }
     if (res.actionValue) setActionValue(res.actionValue);
     (async () => {
       setChatHistory(await getChatHistory());
       setIsProcessing(false);
     })();
-    props.setOpen("")
-  }
+    props.setOpen("");
+  };
 
   useImperativeHandle(ref, () => ({
     handleSend: () => handleSend(),
     handleKeyPress: (e: React.KeyboardEvent) => {
       if (inputRef && inputRef.current) {
-        inputRef.current.handleKeyPress(e)
+        inputRef.current.handleKeyPress(e);
       }
-      
-    }, 
+    },
   }));
 
   const handleSend = async () => {
@@ -127,36 +141,47 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
           role: "HUMAN",
           content: inputValue,
         },
-        loadingMessage("AI")
-      ]) // send user's message
-      setIsProcessing(true)
+        loadingMessage("AI"),
+      ]); // send user's message
+      setIsProcessing(true);
       try {
         if (props.stage === "navigate") {
           firstOrder({ content: inputValue }).then((res) => {
-            dataUpdate(res)
+            dataUpdate(res);
           });
         } else if (props.stage === "questionForInput") {
           if (props.component) {
-            answerForInput({ content: inputValue, component: props.component }).then(
-              (res) => {
-                dataUpdate(res)
-                
-              }
-            );
+            answerForInput({
+              content: inputValue,
+              component: props.component,
+            }).then((res) => {
+              dataUpdate(res);
+            });
           } else {
-            setShownChatList([...shownChatList, errorMessage])
-            setIsProcessing(false)
+            setShownChatList([...shownChatList, errorMessage]);
+            setIsProcessing(false);
             throw new Error("Component is null");
           }
         } else if (props.stage === "questionForSelect") {
-          setShownChatList([...shownChatList, errorMessage])
-          setIsProcessing(false)
-          throw new Error("Temporarily unavailable in chatbox");
+          if (props.components) {
+            answerForFilter({
+              content: inputValue,
+              components: props.components,
+            }).then((res) => {
+              if (res.components && res.components.length !== 0) {
+                dataUpdate(res);
+              } else {
+                setIsProcessing(false);
+              }
+            });
+          }
+          // setShownChatList([...shownChatList, errorMessage]);
+          // setIsProcessing(false);
+          // throw new Error("Temporarily unavailable in chatbox");
           // if (props.component) {
           //   answerForSelect({ content: inputValue, component: props.component }).then(
           //     (res) => {
           //       dataUpdate(res)
-  
           //     }
           //   );
           // } else {
@@ -171,16 +196,16 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
               component: props.component,
               actionValue: actionValue,
             }).then((res) => {
-              dataUpdate(res)
+              dataUpdate(res);
             });
           } else {
-            setShownChatList([...shownChatList, errorMessage])
-            setIsProcessing(false)
+            setShownChatList([...shownChatList, errorMessage]);
+            setIsProcessing(false);
             throw new Error("Component is null");
           }
         } else {
-          setShownChatList([...shownChatList, errorMessage])
-          setIsProcessing(false)
+          setShownChatList([...shownChatList, errorMessage]);
+          setIsProcessing(false);
           throw new Error(`Stage ${props.stage} is not defined`);
         }
       } catch (err) {
@@ -231,7 +256,13 @@ const ChatBox = (props: ChatBoxProps, ref: Ref<unknown> | undefined) => {
           ></path>
         </svg>
       </button>
-      <InputBox ref={inputRef} onSend={handleSend} disabled={isProcessing} inputValue={props.inputValue} setInputValue={props.setInputValue}/>
+      <InputBox
+        ref={inputRef}
+        onSend={handleSend}
+        disabled={isProcessing}
+        inputValue={props.inputValue}
+        setInputValue={props.setInputValue}
+      />
     </div>
   );
 };

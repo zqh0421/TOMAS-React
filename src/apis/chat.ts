@@ -41,13 +41,21 @@ export const navigate = async (request: { url: string }) => {
   return result;
 };
 
-export type ActionType = "select" | "input" | "click" | "focus" | "item";
+export type ActionType =
+  | "select"
+  | "input"
+  | "click"
+  | "focus"
+  | "item"
+  | "pass";
 
 export type ActionComponent = {
   i: string;
   actionType: ActionType;
   description: string;
   html: string;
+  question?: string;
+  content: string;
 };
 
 export type SelectableComponent = {
@@ -55,14 +63,16 @@ export type SelectableComponent = {
   description: string;
   actionType?: ActionType;
   data: string | Record<string, string | string[]>;
-}
+  content: string;
+};
 
 export type AnswerResponse = {
   type: string;
   component?: ActionComponent;
   components?: SelectableComponent[];
   actionValue?: string;
-}
+  screenDescription?: string;
+};
 
 export const firstOrder = async (request: { content: string }) => {
   console.log("First order...");
@@ -102,7 +112,8 @@ export const answerForInput = async (request: {
 
 export const answerForSelect = async (request: {
   content: string;
-  component: SelectableComponent;
+  option: SelectableComponent | null;
+  component: ActionComponent | null;
 }) => {
   console.log("Answer for select...");
   const response = await fetch(
@@ -114,7 +125,31 @@ export const answerForSelect = async (request: {
       },
       body: JSON.stringify({
         content: request.content,
+        option: request.option,
         component: request.component,
+      }),
+    }
+  );
+
+  const result: AnswerResponse = await response.json();
+  return result;
+};
+
+export const answerForFilter = async (request: {
+  content: string;
+  components: SelectableComponent[];
+}) => {
+  console.log("Answer for filter...");
+  const response = await fetch(
+    "http://localhost:8000/api/chats/answer/filter",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: request.content,
+        components: request.components,
       }),
     }
   );
